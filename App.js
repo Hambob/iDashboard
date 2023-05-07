@@ -2,11 +2,27 @@ import { StatusBar } from "expo-status-bar";
 import { Text, View } from "react-native";
 import Home from "./src/screens/Home";
 import Login from "./src/screens/Login";
+import { useFonts } from "expo-font";
+import { useCallback } from "react";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Cairo: require("./assets/fonts/Cairo-Regular.ttf"),
+    CairoBold: require("./assets/fonts/Cairo-Bold.ttf"),
+  });
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View className="flex-1 bg-white">
-      <Login />
+      <Home />
     </View>
   );
 }

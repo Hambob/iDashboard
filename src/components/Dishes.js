@@ -1,13 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
-import MyTabs from "../components/MyTabs";
 
-const Home = () => {
+const Dishes = () => {
   return (
     <View className="w-full h-full bg-white">
-      <MyTabs />
+      <Text>Dishes</Text>
     </View>
   );
 };
 
-export default Home;
+export default Dishes;
