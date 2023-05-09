@@ -12,6 +12,7 @@ module.exports = {
         grayColor: "#D9D9D9",
         grayDarkColor: "#34495E",
         blueColor: "#3498DB",
+        bgGray: "#95A5A6",
       },
       fontFamily: {
         Cairo: ["Cairo"],

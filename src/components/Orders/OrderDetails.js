@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
@@ -10,9 +10,7 @@ const OrderDetails = () => {
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
       <TouchableOpacity
         className="absolute right-5 top-12"
-        onPress={() => {
-          navigation.goBack();
-        }}
+        onPress={() => navigation.goBack()}
       >
         <ChevronRightIcon fill="#6A6D7C" />
       </TouchableOpacity>
@@ -22,14 +20,9 @@ const OrderDetails = () => {
       <View className="w-[90%] h-3/4 bg-[#EEE] mt-6 rounded-lg">
         <View className="w-full h-[20%] flex-row p-4">
           <View className="w-1/2 h-full  justify-around items-center flex-row">
-            <TouchableOpacity className="px-4 py-2 bg-redBtn">
-              <Text className="text-white" style={{ fontFamily: "CairoBold" }}>
-                رفض
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity className="px-4 py-2 bg-mainColor">
               <Text className="text-white" style={{ fontFamily: "CairoBold" }}>
-                قبول
+                جاهز الان
               </Text>
             </TouchableOpacity>
           </View>

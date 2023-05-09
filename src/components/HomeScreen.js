@@ -1,19 +1,36 @@
 import { View, Text, Switch, ScrollView } from "react-native";
 import React, { useState } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "./Home/OrderCard";
-import OrderDetails from "./Home/OrderDetails";
+import OrderDetails from "../components/Home/OrderDetails";
+const Stack = createStackNavigator();
 
 const HomeScreem = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="/"
+        component={ViewOrders}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="/new-details"
+        component={OrderDetails}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const ViewOrders = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [showOrderDetails, setShowOrderDetails] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
     console.log(isEnabled);
   };
-  if (showOrderDetails) {
-    return <OrderDetails setShowOrderDetails={setShowOrderDetails} />;
-  }
   return (
     <SafeAreaView className="w-full h-full bg-white">
       <View className="w-full h-16 bg-mainColor flex-row justify-between px-6 items-center">
@@ -40,9 +57,9 @@ const HomeScreem = () => {
         }}
       >
         <View className="w-full py-4 justify-center items-center">
-          <OrderCard setShowOrderDetails={setShowOrderDetails} />
-          <OrderCard setShowOrderDetails={setShowOrderDetails} />
-          <OrderCard setShowOrderDetails={setShowOrderDetails} />
+          <OrderCard />
+          <OrderCard />
+          <OrderCard />
         </View>
       </ScrollView>
     </SafeAreaView>

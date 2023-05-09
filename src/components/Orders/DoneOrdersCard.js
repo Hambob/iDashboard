@@ -1,19 +1,18 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
 
-const OrderCard = ({ setShowOrderDetails, type = "" }) => {
+const DoneOrdersCard = () => {
   const navigation = useNavigation();
+
   return (
-    <View className="w-[90%] h-32 mt-4 flex-row bg-mainColor rounded-xl">
+    <View className="w-[90%] h-32 mt-4 flex-row bg-bgGray rounded-xl">
       <View className="w-1/2 h-full justify-center items-center">
         <TouchableOpacity
-          className="px-4 py-2 bg-secondColor rounded-lg"
-          onPress={() => {
-            navigation.navigate("/new-details");
-          }}
+          className="px-4 py-2 bg-white rounded-lg"
+          onPress={() => navigation.navigate("/done-details")}
         >
-          <Text className="text-white" style={{ fontFamily: "Cairo" }}>
+          <Text className="text-blackColor" style={{ fontFamily: "Cairo" }}>
             عرض الطلبية
           </Text>
         </TouchableOpacity>
@@ -42,4 +41,4 @@ const OrderCard = ({ setShowOrderDetails, type = "" }) => {
   );
 };
 
-export default OrderCard;
+export default DoneOrdersCard;

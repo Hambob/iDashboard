@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 import Home from "./Dish/Home";
 import Add from "./Dish/Add";
 import Edit from "./Dish/Edit";
