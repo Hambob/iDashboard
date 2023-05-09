@@ -4,11 +4,15 @@ import { PlusIcon } from "react-native-heroicons/solid";
 import React from "react";
 import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
+import DeletePopUp from "./DeletePopUp";
 
 const Home = () => {
   const navigation = useNavigation();
+  const [showDelete, setShowDelete] = React.useState(false);
   return (
-    <SafeAreaView className="w-full h-full bg-white px-4 py-6 pt-10">
+    <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">
+      {showDelete && <DeletePopUp setShowDelete={setShowDelete} />}
+
       <Text className="text-lg" style={{ fontFamily: "CairoBold" }}>
         الأطباق
       </Text>
@@ -19,7 +23,7 @@ const Home = () => {
         }}
       >
         <View className="flex-1">
-          <DishRow />
+          <DishRow setShowDelete={setShowDelete} />
           <DishRow />
           <DishRow />
           <DishRow />

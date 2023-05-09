@@ -3,7 +3,7 @@ import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const DishRow = () => {
+const DishRow = ({ setShowDelete }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
@@ -24,7 +24,7 @@ const DishRow = () => {
         <TouchableOpacity onPress={() => navigation.navigate("/edit")}>
           <PencilIcon size={26} fill="#34495E" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowDelete(true)}>
           <TrashIcon size={26} fill="#E74C3C" />
         </TouchableOpacity>
       </View>
