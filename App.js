@@ -4,7 +4,9 @@ import Home from "./src/screens/Home";
 import Login from "./src/screens/Login";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
-
+import OrderDetails from "./src/components/Home/OrderDetails";
+import Dishes from "./src/components/Dishes";
+import "react-native-gesture-handler";
 export default function App() {
   const [fontsLoaded] = useFonts({
     Cairo: require("./assets/fonts/Cairo-Regular.ttf"),

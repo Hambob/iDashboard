@@ -2,13 +2,18 @@ import { View, Text, Switch, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "./Home/OrderCard";
+import OrderDetails from "./Home/OrderDetails";
 
 const HomeScreem = () => {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [showOrderDetails, setShowOrderDetails] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
     console.log(isEnabled);
   };
+  if (showOrderDetails) {
+    return <OrderDetails setShowOrderDetails={setShowOrderDetails} />;
+  }
   return (
     <SafeAreaView className="w-full h-full bg-white">
       <View className="w-full h-16 bg-mainColor flex-row justify-between px-6 items-center">
@@ -35,9 +40,9 @@ const HomeScreem = () => {
         }}
       >
         <View className="w-full py-4 justify-center items-center">
-          <OrderCard />
-          <OrderCard />
-          <OrderCard />
+          <OrderCard setShowOrderDetails={setShowOrderDetails} />
+          <OrderCard setShowOrderDetails={setShowOrderDetails} />
+          <OrderCard setShowOrderDetails={setShowOrderDetails} />
         </View>
       </ScrollView>
     </SafeAreaView>

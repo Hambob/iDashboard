@@ -7,6 +7,11 @@ module.exports = {
         mainColor: "#37BD6B",
         secondColor: "#FEAC56",
         textColor: "#6A6D7C",
+        redBtn: "#E74C3C",
+        blackColor: "#171215",
+        grayColor: "#D9D9D9",
+        grayDarkColor: "#34495E",
+        blueColor: "#3498DB",
       },
       fontFamily: {
         Cairo: ["Cairo"],
