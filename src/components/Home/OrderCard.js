@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const OrderCard = ({ setShowOrderDetails, type = "" }) => {
+const OrderCard = ({ cardType }) => {
   const navigation = useNavigation();
   return (
     <View className="w-[90%] h-32 mt-4 flex-row bg-mainColor rounded-xl">
@@ -10,7 +10,11 @@ const OrderCard = ({ setShowOrderDetails, type = "" }) => {
         <TouchableOpacity
           className="px-4 py-2 bg-secondColor rounded-lg"
           onPress={() => {
-            navigation.navigate("/new-details");
+            if (cardType === "progress") {
+              navigation.navigate("/progress-details", { doneOrder: false });
+            } else {
+              navigation.navigate("/new-details");
+            }
           }}
         >
           <Text className="text-white" style={{ fontFamily: "Cairo" }}>

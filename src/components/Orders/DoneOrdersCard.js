@@ -10,7 +10,9 @@ const DoneOrdersCard = () => {
       <View className="w-1/2 h-full justify-center items-center">
         <TouchableOpacity
           className="px-4 py-2 bg-white rounded-lg"
-          onPress={() => navigation.navigate("/done-details")}
+          onPress={() =>
+            navigation.navigate("/done-details", { doneOrder: true })
+          }
         >
           <Text className="text-blackColor" style={{ fontFamily: "Cairo" }}>
             عرض الطلبية

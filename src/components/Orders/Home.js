@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NewOrders from "./NewOrders";
 import DoneOrdersCard from "./DoneOrdersCard";
 import OrderDetails from "./OrderDetails";
+import ProgressOrder from "./ProgressOrder";
 
 const Home = () => {
   const [isSelect, setIsSelect] = React.useState("new");
@@ -63,6 +64,7 @@ const Home = () => {
         <View className="w-full h-full justify-center items-center">
           {isSelect === "new" && <NewOrders />}
           {isSelect === "done" && <DoneOrdersCard />}
+          {isSelect === "under" && <ProgressOrder />}
         </View>
       </ScrollView>
     </SafeAreaView>

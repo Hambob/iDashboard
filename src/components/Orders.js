@@ -26,6 +26,11 @@ const Orders = () => {
         component={OrderDetailsFromHome}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="/progress-details"
+        component={OrderDetails}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
