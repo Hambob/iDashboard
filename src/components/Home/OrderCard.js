@@ -30,7 +30,15 @@ const OrderCard = ({
           className="px-4 py-2 bg-secondColor rounded-lg"
           onPress={() => {
             if (cardType === "progress") {
-              navigation.navigate("/progress-details", { doneOrder: false });
+              navigation.navigate("/progress-details", {
+                doneOrder: false,
+                order_id,
+                c_name,
+                total_price,
+                note,
+                items,
+                setRefreshEvent: "setRefresh",
+              });
             } else {
               navigation.navigate("/new-details", {
                 order_id,

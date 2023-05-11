@@ -7,7 +7,6 @@ const DishRow = ({ setShowDelete }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
-    console.log(isEnabled);
   };
   const navigation = useNavigation();
   return (

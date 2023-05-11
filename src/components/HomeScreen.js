@@ -6,7 +6,7 @@ import OrderCard from "./Home/OrderCard";
 import OrderDetails from "../components/Home/OrderDetails";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
 import axios from "axios";
-import { api, token } from "../utilts/api";
+import { api, token, calcTotal } from "../utilts/api";
 
 const Stack = createStackNavigator();
 
@@ -45,7 +45,6 @@ export const ViewOrders = () => {
         const theOrders = data.data.orders.filter(
           (order) => order.status === "PENDING"
         );
-        console.log("--->", theOrders);
         setPendingOrders(theOrders);
       })
       .catch((err) => {
@@ -53,17 +52,9 @@ export const ViewOrders = () => {
       });
   }, [refresh]);
 
-  const calcTotal = (items) => {
-    let total = 0;
-    items.map((item) => {
-      total += item.price;
-    });
-    return total;
-  };
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
-    console.log(isEnabled);
   };
   return (
     <SafeAreaView className="w-full h-full bg-white">
@@ -82,7 +73,7 @@ export const ViewOrders = () => {
       </View>
       <View className="w-full h-12 flex-row justify-between items-center px-6 mt-4">
         <TouchableOpacity onPress={() => setRefresh(!refresh)}>
-          <ArrowPathIcon size={20} fill="#FFF" />
+          <ArrowPathIcon size={20} fill="gray" />
         </TouchableOpacity>
         <Text className="text-xl border-b w-36" style={{ fontFamily: "Cairo" }}>
           الطلبات الواردة
