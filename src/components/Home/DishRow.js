@@ -2,8 +2,9 @@ import { View, Text, Image, Switch, TouchableOpacity } from "react-native";
 import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { api } from "../../utilts/api";
 
-const DishRow = ({ setShowDelete }) => {
+const DishRow = ({ setShowDelete, dish, setRefresh, refresh, setDishId }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
@@ -20,29 +21,42 @@ const DishRow = ({ setShowDelete }) => {
           value={isEnabled}
           style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
         />
-        <TouchableOpacity onPress={() => navigation.navigate("/edit")}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("/edit", {
+              name: dish.name,
+              price: dish.price,
+              category: dish,
+            })
+          }
+        >
           <PencilIcon size={26} fill="#34495E" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowDelete(true)}>
+        <TouchableOpacity
+          onPress={() => {
+            setShowDelete(true);
+            setDishId(dish.dish_id);
+          }}
+        >
           <TrashIcon size={26} fill="#E74C3C" />
         </TouchableOpacity>
       </View>
       <View className="w-1/3 h-full justify-end items-center flex-row">
         <View className="mr-2 gap-2">
           <Text className="text-grayDarkColor" style={{ fontFamily: "Cairo" }}>
-            شاورما عربي
+            {dish.name}
           </Text>
           <Text
             className="text-grayDarkColor text-xs"
             style={{ fontFamily: "Cairo" }}
           >
-            700 د.ل
+            {dish.price} د.ل
           </Text>
         </View>
         <Image
           className="w-12 h-12 rounded-full"
           style={{ borderWidth: 1, borderColor: "#FFF" }}
-          source={require("../../../assets/test.jpeg")}
+          source={{ uri: `${api}/images/${dish.img}` }}
         />
       </View>
     </View>

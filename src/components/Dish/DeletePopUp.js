@@ -1,8 +1,25 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { CheckIcon, XMarkIcon } from "react-native-heroicons/solid";
+import axios from "axios";
+import { api, token } from "../../utilts/api";
 
-const DeletePopUp = ({ setShowDelete }) => {
+const DeletePopUp = ({ setShowDelete, dishId, setRefresh, refresh }) => {
+  const deleteDish = () => {
+    axios
+      .delete(`${api}/dish/delete/${Number(dishId)}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setShowDelete(false);
+        setRefresh(!refresh);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <View className="w-80 left-10 z-50  rounded-lg h-36 absolute top-72 justify-center items-center bg-grayDarkColor">
       <Text
@@ -18,7 +35,10 @@ const DeletePopUp = ({ setShowDelete }) => {
         >
           <XMarkIcon size={30} fill="#FFF" />
         </TouchableOpacity>
-        <TouchableOpacity className="w-20 h-10 bg-mainColor justify-center items-center">
+        <TouchableOpacity
+          className="w-20 h-10 bg-mainColor justify-center items-center"
+          onPress={deleteDish}
+        >
           <CheckIcon size={30} fill="#FFF" />
         </TouchableOpacity>
       </View>
