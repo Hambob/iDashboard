@@ -1,14 +1,16 @@
 import { View, Text, Image, Switch, TouchableOpacity } from "react-native";
 import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { api } from "../../utilts/api";
+import { imgUrl } from "../../utilts/api";
+import FastImage from "react-native-fast-image";
 
-const DishRow = ({ setShowDelete, dish, setRefresh, refresh, setDishId }) => {
+const DishRow = ({ setShowDelete, dish, setDishId }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled((previousState) => !previousState);
   };
+
   const navigation = useNavigation();
   return (
     <View className="w-full h-24 rounded-lg bg-grayColor justify-center mt-4 items-center flex-row px-4">
@@ -53,10 +55,15 @@ const DishRow = ({ setShowDelete, dish, setRefresh, refresh, setDishId }) => {
             {dish.price} د.ل
           </Text>
         </View>
+        {/* <FastImage
+          className="w-44 h-44 rounded-full mb-10"
+          source={{ uri: `${imgUrl}/images/${dish.img}` }}
+          resizeMode={FastImage.resizeMode.contain}
+        /> */}
         <Image
-          className="w-12 h-12 rounded-full"
+          className="w-12  h-12 rounded-full"
           style={{ borderWidth: 1, borderColor: "#FFF" }}
-          source={{ uri: `${api}/images/${dish.img}` }}
+          source={{ uri: `${imgUrl}/${dish.img}` }}
         />
       </View>
     </View>

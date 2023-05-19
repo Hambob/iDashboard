@@ -1,7 +1,8 @@
-export const api = "http://192.168.1.109:3000";
+export const api = "https://squid-app-mweri.ondigitalocean.app";
 export const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywicmVzdF9pZCI6NywiaWF0IjoxNjgzODM3MTUxLCJleHAiOjE2ODM5MjM1NTF9.seO6IP082EK0H-de9H979j4PimxqYWIaGiompN0gkR8";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicmVzdF9pZCI6MSwiaWF0IjoxNjg0NDM3OTk2LCJleHAiOjE2ODQ1MjQzOTZ9.htxVjcw-cSVDHUyg75D1IIt314gt-vVkwVtNpFoXA8w";
 
+export const imgUrl = "https://idelivery.blob.core.windows.net/images";
 export const calcTotal = (items) => {
   let total = 0;
   items.map((item) => {

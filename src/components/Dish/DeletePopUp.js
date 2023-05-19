@@ -3,8 +3,9 @@ import React from "react";
 import { CheckIcon, XMarkIcon } from "react-native-heroicons/solid";
 import axios from "axios";
 import { api, token } from "../../utilts/api";
+import { event } from "../../event";
 
-const DeletePopUp = ({ setShowDelete, dishId, setRefresh, refresh }) => {
+const DeletePopUp = ({ setShowDelete, dishId }) => {
   const deleteDish = () => {
     axios
       .delete(`${api}/dish/delete/${Number(dishId)}`, {
@@ -14,7 +15,7 @@ const DeletePopUp = ({ setShowDelete, dishId, setRefresh, refresh }) => {
       })
       .then((res) => {
         setShowDelete(false);
-        setRefresh(!refresh);
+        event.emit("setRefresh");
       })
       .catch((err) => {
         console.log(err);

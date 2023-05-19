@@ -50,7 +50,9 @@ const Login = () => {
     <View className="flex-1 justify-center items-center">
       <View className="h-1/2 w-full  items-center justify-end">
         <Image
-          source={require("../../assets/idelivery.png")}
+          source={{
+            uri: "https://idelivery.blob.core.windows.net/media/driver.svg",
+          }}
           className="w-50 h-50 "
         />
       </View>
