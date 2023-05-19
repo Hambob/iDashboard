@@ -1,26 +1,35 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Button,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
+import InputWarning from "../utilts/InputWarning";
+import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
+import event from "../../event";
 import axios from "axios";
-import { api } from "./../../utilts/api";
+import { api, token } from "../../utilts/api";
 
 const Edit = () => {
   const navigation = useNavigation();
-  const [selected, setSelected] = React.useState("");
+
+  const c = useRoute().params.category;
+  const n = useRoute().params.name;
+  const d = useRoute().params.desc;
+  const p = useRoute().params.price;
+  const { dish_id } = useRoute().params;
+
+  // const [selected, setSelected] = React.useState("");
   const [categories, setCategories] = React.useState([]);
-  const [category, setCategory] = React.useState("1");
+  const [category, setCategory] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [desc, setDesc] = React.useState("");
+  const [price, setPrice] = React.useState();
   const [image, setImage] = useState(null);
+  const [inputMessage, setInputMessage] = useState("");
+  const [showInputMessage, setShowInputMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
     axios
@@ -31,12 +40,51 @@ const Edit = () => {
       .catch((err) => {
         console.log(err);
       });
+
+    console.log("----->", dish_id);
   }, []);
 
   const pureArray = [];
   categories.map((category) => {
     pureArray.push({ key: category.cat_id, value: category.name });
   });
+
+  const handleUpdate = () => {
+    if (!name && !price && !desc && !category && !image) {
+      showToast();
+      return;
+    }
+
+    const formData = new FormData();
+    name && formData.append("name", name);
+    price && formData.append("price", Number(price));
+    desc && formData.append("description", desc);
+    category && formData.append("category", Number(category));
+    image &&
+      formData.append("img", {
+        uri: image,
+        type: "image/jpg",
+        name: new Date().getTime() + "dish",
+      });
+
+    console.log("--->", formData);
+
+    axios
+      .patch(`${api}/dish/update/${dish_id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        event.emit("setRefresh");
+        navigation.goBack();
+      })
+      .catch((err) => {
+        console.log("-->", err);
+      });
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -52,66 +100,130 @@ const Edit = () => {
     }
   };
   return (
-    <SafeAreaView className="flex-1 bg-white relative justify-center items-center px-6">
+    <SafeAreaView className="flex-1 py-4 bg-white relative justify-center items-center px-6">
       <TouchableOpacity
-        className="absolute right-5 top-12"
+        className="w-full h-16 justify-end items-end"
         onPress={() => navigation.goBack()}
       >
         <ChevronRightIcon fill="#6A6D7C" />
       </TouchableOpacity>
-      <View className="w-full h-1/2 px-4">
-        <Text
-          className="text-right text-sm text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          إسم الطبق
-        </Text>
-        <TextInput
-          placeholder="hamzah@me.com"
-          className="w-72 h-8 border-b border-[#EEE] mx-auto"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-        />
-
-        <Text
-          className="text-right text-sm mt-5 text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          السعر
-        </Text>
-        <TextInput
-          placeholder="hamzah@me.com"
-          className="w-72 h-8 border-b mb-8 border-[#EEE] mx-auto"
-          textContentType="emailAddress"
-          keyboardType="numeric"
-        />
-
-        <Text
-          className="text-right text-sm text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          الصنف
-        </Text>
-        <SelectList
-          setSelected={(text) => setCategory(text)}
-          data={pureArray}
-          save="key"
-          placeholder="إختر الصنف"
-        />
+      <View className="w-full h-[95%] justify-around">
+        <View className="relative">
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            إسم الطبق
+          </Text>
+          <TextInput
+            className="w-full h-8 border-b mb-2 border-[#EEE] mx-auto"
+            defaultValue={n}
+            onChangeText={(text) => {
+              setName(text);
+              if (text.length > 30) {
+                setInputMessage(inputLengthMessage);
+                setMessageType("warning");
+                setShowInputMessage("name");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("name");
+              }
+            }}
+          />
+          {showInputMessage === "name" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right mb-4 text-sm text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            وصف قصير
+          </Text>
+          <TextInput
+            className="w-full h-8 mb-2 border-b border-[#EEE] mx-auto"
+            defaultValue={d}
+            onChangeText={(text) => {
+              setDesc(text);
+              if (text.length > 30) {
+                setInputMessage(inputLengthMessage);
+                setMessageType("warning");
+                setShowInputMessage("desc");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("desc");
+              }
+            }}
+          />
+          {showInputMessage === "desc" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            السعر
+          </Text>
+          <TextInput
+            className="w-full h-8 mb-2 border-b border-[#EEE] mx-auto"
+            keyboardType="number-pad"
+            contextMenuHidden={true}
+            defaultValue={p.toString()}
+            onChangeText={(text) => {
+              setPrice(text);
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("price");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+            }}
+          />
+          {showInputMessage === "price" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            الصنف
+          </Text>
+          <SelectList
+            setSelected={(text) => setCategory(text)}
+            data={pureArray}
+            save="key"
+            placeholder="إختر الصنف"
+          />
+        </View>
         <TouchableOpacity
           onPress={pickImage}
-          className="w-3/4 mx-auto rounded-lg justify-center items-center mt-8 bg-grayDarkColor py-4"
+          className="w-3/4 mx-auto rounded-lg justify-center items-center bg-grayDarkColor py-4"
         >
           <Text className="text-white" style={{ fontFamily: "Cairo" }}>
             اختر الصورة
           </Text>
         </TouchableOpacity>
-        {image && (
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-        )}
-      </View>
-      <View className="w-full px-4 h-36 justify-end">
-        <TouchableOpacity className="w-3/4 mx-auto rounded-lg justify-center items-center mt-8 bg-blueColor py-4">
+        <TouchableOpacity
+          onPress={handleUpdate}
+          className="w-3/4 mx-auto rounded-lg  justify-center items-center bg-blueColor py-4"
+        >
           <Text
             style={{ fontFamily: "Cairo" }}
             className="text-sm items-center text-white"

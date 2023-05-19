@@ -1,12 +1,13 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PlusIcon } from "react-native-heroicons/solid";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
 import DeletePopUp from "./DeletePopUp";
 import axios from "axios";
 import { api, token } from "../../utilts/api";
+import Toast, { BaseToast } from "react-native-toast-message";
 import { event } from "../../event";
 
 const Home = () => {
@@ -15,9 +16,37 @@ const Home = () => {
   const [refresh, setRefresh] = React.useState(false);
   const [dishes, setDishes] = React.useState();
   const [dishId, setDishId] = React.useState();
+  const [dishStatusMsg, setDishStatusMsg] = React.useState("");
 
   const setRefreshAction = () => {
     setRefresh(!refresh);
+  };
+  const showingToast = () => {
+    Toast.show({
+      type: "success",
+      text1: "تم تحديث حالة الطبق",
+      text2: dishStatusMsg,
+      position: "bottom",
+    });
+  };
+
+  const toastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ zIndex: 100, borderLeftColor: "#37BD6B" }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 17,
+          fontWeight: "400",
+          fontFamily: "Cairo",
+        }}
+        text2Style={{
+          fontSize: 15,
+          fontFamily: "Cairo",
+        }}
+      />
+    ),
   };
 
   useEffect(() => {
@@ -44,7 +73,7 @@ const Home = () => {
       {showDelete && (
         <DeletePopUp dishId={dishId} setShowDelete={setShowDelete} />
       )}
-
+      <Toast config={toastConfig} />
       <Text className="text-lg" style={{ fontFamily: "CairoBold" }}>
         الأطباق
       </Text>
@@ -55,15 +84,28 @@ const Home = () => {
         }}
       >
         <View className="flex-1">
-          {dishes?.map((dish) => (
-            <DishRow
-              key={dish.dish_id}
-              setShowDelete={setShowDelete}
-              dish={dish}
-              setRefreshAction={setRefreshAction}
-              setDishId={setDishId}
-            />
-          ))}
+          {dishes?.length > 0 ? (
+            dishes?.map((dish) => (
+              <DishRow
+                key={dish.dish_id}
+                setShowDelete={setShowDelete}
+                dish={dish}
+                setRefreshAction={setRefreshAction}
+                setDishId={setDishId}
+                showingToast={showingToast}
+                setDishStatusMsg={setDishStatusMsg}
+              />
+            ))
+          ) : (
+            <View className="w-full h-96 justify-center items-center">
+              <Text
+                className="text-blackColor text-lg"
+                style={{ fontFamily: "Cairo" }}
+              >
+                لا يوجد أطباق
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
       <TouchableOpacity

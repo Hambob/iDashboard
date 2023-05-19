@@ -9,6 +9,9 @@ import axios from "axios";
 import { api, token } from "./../../utilts/api";
 import * as Progress from "react-native-progress";
 import { event } from "../../event";
+import InputWarning from "../utilts/InputWarning";
+import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
+import Toast, { ErrorToast } from "react-native-toast-message";
 
 const Add = ({ setRefreshEvent }) => {
   const navigation = useNavigation();
@@ -20,6 +23,17 @@ const Add = ({ setRefreshEvent }) => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
+  const [inputMessage, setInputMessage] = useState("");
+  const [showInputMessage, setShowInputMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  const showToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "خطأ",
+      text2: "الرجاء ملئ كل الحقول بشكل صحيح",
+    });
+  };
 
   useEffect(() => {
     axios
@@ -33,6 +47,11 @@ const Add = ({ setRefreshEvent }) => {
   }, []);
 
   const handleAdd = () => {
+    if (!name || !price || !description || !category || !image) {
+      showToast();
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", name);
     formData.append("price", Number(price));
@@ -65,7 +84,8 @@ const Add = ({ setRefreshEvent }) => {
         navigation.goBack();
       })
       .catch((err) => {
-        console.log("error -->", err);
+        showToast();
+        setProgress(0);
       });
   };
 
@@ -87,8 +107,25 @@ const Add = ({ setRefreshEvent }) => {
       setImage(result.assets[0].uri);
     }
   };
+
+  const toastConfig = {
+    error: (props) => (
+      <ErrorToast
+        {...props}
+        text1Style={{
+          fontSize: 17,
+          fontFamily: "Cairo",
+        }}
+        text2Style={{
+          fontSize: 15,
+          fontFamily: "Cairo",
+        }}
+      />
+    ),
+  };
   return (
-    <SafeAreaView className="flex-1 bg-white relative justify-center items-center px-6">
+    <SafeAreaView className="flex-1 py-4 bg-white relative justify-center items-center px-6">
+      <Toast config={toastConfig} />
       {progress > 0 && (
         <View className="w-full h-10  absolute top-10 justify-center items-center">
           <Text className="text-xs" style={{ fontFamily: "Cairo" }}>
@@ -104,66 +141,120 @@ const Add = ({ setRefreshEvent }) => {
         </View>
       )}
       <TouchableOpacity
-        className="absolute right-5 top-12"
+        className="w-full h-16 justify-end items-end"
         onPress={() => navigation.goBack()}
       >
         <ChevronRightIcon fill="#6A6D7C" />
       </TouchableOpacity>
-      <View className="w-full h-[95%] justify-between py-12">
-        <Text
-          className="text-right text-sm text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          إسم الطبق
-        </Text>
-        <TextInput
-          placeholder="برجر لحم"
-          className="w-72 h-8 border-b border-[#EEE] mx-auto"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          onChangeText={(text) => setName(text)}
-        />
-
-        <Text
-          className="text-right text-sm text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          وصف قصير
-        </Text>
-        <TextInput
-          placeholder="شرائح اللحم مه الصوص"
-          className="w-72 h-8 border-b border-[#EEE] mx-auto"
-          textContentType="emailAddress"
-          keyboardType="email-address"
-          onChangeText={(text) => setDescription(text)}
-        />
-
-        <Text
-          className="text-right text-sm  text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          السعر
-        </Text>
-        <TextInput
-          placeholder="9"
-          className="w-72 h-8 border-b border-[#EEE] mx-auto"
-          textContentType="emailAddress"
-          keyboardType="numeric"
-          onChangeText={(text) => setPrice(text)}
-        />
-
-        <Text
-          className="text-right text-sm text-[#95A5A6]"
-          style={{ fontFamily: "Cairo" }}
-        >
-          الصنف
-        </Text>
-        <SelectList
-          setSelected={(text) => setCategory(text)}
-          data={pureArray}
-          save="key"
-          placeholder="إختر الصنف"
-        />
+      <View className="w-full h-[95%] justify-around">
+        <View className="relative">
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            إسم الطبق
+          </Text>
+          <TextInput
+            placeholder="مثال: برجر لحم | يجب ان لا يزيد حجم النص عن 30 حرف"
+            className="w-full h-8 border-b mb-2 border-[#EEE] mx-auto"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            onChangeText={(text) => {
+              setName(text);
+              if (text.length > 30) {
+                setInputMessage(inputLengthMessage);
+                setMessageType("warning");
+                setShowInputMessage("name");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("name");
+              }
+            }}
+          />
+          {showInputMessage === "name" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right mb-4 text-sm text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            وصف قصير
+          </Text>
+          <TextInput
+            placeholder="شرائح اللحم مه الصوص"
+            className="w-full h-8 mb-2 border-b border-[#EEE] mx-auto"
+            textContentType="emailAddress"
+            keyboardType="email-address"
+            onChangeText={(text) => {
+              setDescription(text);
+              if (text.length > 30) {
+                setInputMessage(inputLengthMessage);
+                setMessageType("warning");
+                setShowInputMessage("desc");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("desc");
+              }
+            }}
+          />
+          {showInputMessage === "desc" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            السعر
+          </Text>
+          <TextInput
+            placeholder="9"
+            className="w-full h-8 mb-2 border-b border-[#EEE] mx-auto"
+            keyboardType="number-pad"
+            contextMenuHidden={true}
+            onChangeText={(text) => {
+              setPrice(text);
+              if (text.length < 1) {
+                setInputMessage(inputErrorMessage);
+                setMessageType("error");
+                setShowInputMessage("price");
+              } else {
+                setShowInputMessage("");
+                setInputMessage("");
+              }
+            }}
+          />
+          {showInputMessage === "price" && (
+            <InputWarning type={messageType} message={inputMessage} />
+          )}
+        </View>
+        <View>
+          <Text
+            className="text-right text-sm mb-4 text-[#95A5A6]"
+            style={{ fontFamily: "Cairo" }}
+          >
+            الصنف
+          </Text>
+          <SelectList
+            setSelected={(text) => setCategory(text)}
+            data={pureArray}
+            save="key"
+            placeholder="إختر الصنف"
+          />
+        </View>
         <TouchableOpacity
           onPress={pickImage}
           className="w-3/4 mx-auto rounded-lg justify-center items-center bg-grayDarkColor py-4"
@@ -172,22 +263,17 @@ const Add = ({ setRefreshEvent }) => {
             اختر الصورة
           </Text>
         </TouchableOpacity>
-        {/* {image && (
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-        )} */}
-        <View className="px-">
-          <TouchableOpacity
-            onPress={handleAdd}
-            className="w-3/4 mx-auto rounded-lg justify-center items-center bg-mainColor py-4"
+        <TouchableOpacity
+          onPress={handleAdd}
+          className="w-3/4 mx-auto rounded-lg  justify-center items-center bg-mainColor py-4"
+        >
+          <Text
+            style={{ fontFamily: "Cairo" }}
+            className="text-sm items-center text-white"
           >
-            <Text
-              style={{ fontFamily: "Cairo" }}
-              className="text-sm items-center text-white"
-            >
-              اضافة
-            </Text>
-          </TouchableOpacity>
-        </View>
+            اضافة
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

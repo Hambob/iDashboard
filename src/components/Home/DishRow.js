@@ -1,14 +1,57 @@
-import { View, Text, Image, Switch, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  Switch,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { imgUrl } from "../../utilts/api";
+import { api, imgUrl, token } from "../../utilts/api";
 import FastImage from "react-native-fast-image";
+import axios from "axios";
 
-const DishRow = ({ setShowDelete, dish, setDishId }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => {
-    setIsEnabled((previousState) => !previousState);
+const DishRow = ({
+  setShowDelete,
+  dish,
+  setDishId,
+  showingToast,
+  setDishStatusMsg,
+}) => {
+  const [isEnabled, setIsEnabled] = useState(
+    dish.status === "avaliable" ? true : false
+  );
+
+  useEffect(() => {
+    setDishStatusMsg(!isEnabled ? "الطلب الأن متوفر" : "الطلب الأن غير متوفر");
+  }, []);
+
+  const toggleSwitch = (dish_id) => {
+    const status = isEnabled ? "not_avaliable" : "avaliable";
+    axios
+      .patch(
+        `${api}/dish/update/${dish_id}`,
+        {
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setDishStatusMsg(
+          status !== "avaliable" ? "الطلب الأن متوفر" : "الطلب الأن غير متوفر"
+        );
+        showingToast();
+      })
+      .catch((err) => {
+        Alert.alert("Error");
+      });
+    setIsEnabled(status === "avaliable" ? true : false);
   };
 
   const navigation = useNavigation();
@@ -17,9 +60,11 @@ const DishRow = ({ setShowDelete, dish, setDishId }) => {
       <View className="flex-1 h-full flex-row  gap-4 items-center">
         <Switch
           trackColor={{ false: "#FFF", true: "#FFF" }}
-          thumbColor={isEnabled ? "#34495E" : "#f4f3f4"}
+          thumbColor={isEnabled ? "#FEAC56" : "#f4f3f4"}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
+          onValueChange={() => {
+            toggleSwitch(dish.dish_id);
+          }}
           value={isEnabled}
           style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
         />
@@ -28,7 +73,9 @@ const DishRow = ({ setShowDelete, dish, setDishId }) => {
             navigation.navigate("/edit", {
               name: dish.name,
               price: dish.price,
-              category: dish,
+              category: dish.category.cat_id,
+              desc: dish.description,
+              dish_id: dish.dish_id,
             })
           }
         >
