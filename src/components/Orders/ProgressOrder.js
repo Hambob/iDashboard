@@ -6,17 +6,21 @@ import { calcTotal } from "../../utilts/api";
 const ProgressOrder = ({ orders }) => {
   return (
     <View className="w-full h-full items-center justify-center">
-      {orders?.map((order) => (
-        <OrderCard
-          key={order.order_id}
-          cardType="progress"
-          order_id={order.order_id}
-          c_name={order.user.fullname}
-          total_price={calcTotal(order.orderItem)}
-          note={order.note}
-          items={order.orderItem}
-        />
-      ))}
+      {orders?.length > 0 ? (
+        orders?.map((order) => (
+          <OrderCard
+            key={order.order_id}
+            cardType="progress"
+            order_id={order.order_id}
+            c_name={order.user.fullname}
+            total_price={calcTotal(order.orderItem)}
+            note={order.note}
+            items={order.orderItem}
+          />
+        ))
+      ) : (
+        <Text className="text-white">لا يوجد طلبيات قيد التنفيذ</Text>
+      )}
     </View>
   );
 };

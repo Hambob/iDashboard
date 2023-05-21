@@ -7,6 +7,9 @@ import OrderDetails from "../components/Home/OrderDetails";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
 import axios from "axios";
 import { api, token, calcTotal } from "../utilts/api";
+import Toast, { BaseToast } from "react-native-toast-message";
+
+///manager/restaurants/update/
 
 const Stack = createStackNavigator();
 
@@ -33,6 +36,54 @@ export const ViewOrders = () => {
   const [orders, setOrders] = useState();
   const [pendingOrders, setPendingOrders] = useState();
   const [refresh, setRefresh] = useState(false);
+  const [isEnabled, setIsEnabled] = useState();
+  const showingRestaurantToast = (msg) => {
+    Toast.show({
+      type: "success",
+      text1: msg,
+      position: "bottom",
+    });
+  };
+
+  const showErrorToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "خطأ",
+      text2: "حدث خطأ ما",
+      position: "bottom",
+    });
+  };
+
+  const toastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        style={{ zIndex: 100, borderLeftColor: "#37BD6B" }}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        text1Style={{
+          fontSize: 17,
+          fontWeight: "400",
+          fontFamily: "Cairo",
+        }}
+        text2Style={{
+          fontSize: 15,
+          fontFamily: "Cairo",
+        }}
+      />
+    ),
+  };
+
+  const toastNotificationMsg = (status) => {
+    switch (status) {
+      case "OPEN":
+        return "تم فتح المطعم";
+      case "CLOSED":
+        return "تم إغلاق المطعم";
+      default:
+        return "تم إغلاق المطعم";
+    }
+  };
+
   useEffect(() => {
     axios
       .get(`${api}/manager/orders`, {
@@ -50,14 +101,47 @@ export const ViewOrders = () => {
       .catch((err) => {
         console.log("Error -->", err);
       });
+
+    axios
+      .get(`${api}/restaurant/status`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setIsEnabled(res.data.status.status === "OPEN" ? true : false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [refresh]);
 
-  const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
+    const status = isEnabled ? "CLOSE" : "OPEN";
+    axios
+      .patch(
+        `${api}/manager/restaurants/update`,
+        {
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setRefresh(!refresh);
+        showingRestaurantToast(toastNotificationMsg(status));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setIsEnabled((previousState) => !previousState);
   };
   return (
     <SafeAreaView className="w-full h-full bg-white">
+      <Toast config={toastConfig} />
       <View className="w-full h-16 bg-mainColor flex-row justify-between px-6 items-center">
         <Switch
           trackColor={{ false: "#FFF", true: "#FFF" }}
@@ -85,19 +169,30 @@ export const ViewOrders = () => {
         }}
       >
         <View className="w-full py-4 justify-center items-center">
-          {pendingOrders?.map((order) => (
-            <OrderCard
-              c_name={order.user.fullname}
-              total_price={calcTotal(order.orderItem)}
-              key={order.order_id}
-              order_id={order.order_id}
-              cardType="new"
-              note={order.note}
-              items={order.orderItem}
-              setRefresh={setRefresh}
-              refresh={refresh}
-            />
-          ))}
+          {pendingOrders?.length > 0 ? (
+            pendingOrders?.map((order) => (
+              <OrderCard
+                c_name={order.user.fullname}
+                total_price={calcTotal(order.orderItem)}
+                key={order.order_id}
+                order_id={order.order_id}
+                cardType="new"
+                note={order.note}
+                items={order.orderItem}
+                setRefresh={setRefresh}
+                refresh={refresh}
+              />
+            ))
+          ) : (
+            <View className="w-full h-96 justify-center items-center">
+              <Text
+                style={{ fontFamily: "Cairo" }}
+                className="text-2xl text-grayDarkColor"
+              >
+                لا يوجد طلبات
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
