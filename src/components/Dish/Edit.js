@@ -5,6 +5,7 @@ import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
+import { getInfoAsync } from "expo-file-system";
 import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
 import { event } from "../../event";
@@ -30,6 +31,7 @@ const Edit = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [showInputMessage, setShowInputMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [showBigFileAlert, setShowBigFileAlert] = useState(false);
 
   useEffect(() => {
     axios
@@ -91,6 +93,15 @@ const Edit = () => {
       aspect: [4, 3],
       quality: 1,
     });
+
+    const fileInfo = await getInfoAsync(result.assets[0].uri);
+    console.log("fileInfo", fileInfo);
+
+    if (fileInfo.size > 1000000) {
+      setShowBigFileAlert(true);
+    } else {
+      setShowBigFileAlert(false);
+    }
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -209,14 +220,19 @@ const Edit = () => {
             placeholder="إختر الصنف"
           />
         </View>
-        <TouchableOpacity
-          onPress={pickImage}
-          className="w-3/4 mx-auto rounded-lg justify-center items-center bg-grayDarkColor py-4"
-        >
-          <Text className="text-white" style={{ fontFamily: "Cairo" }}>
-            اختر الصورة
-          </Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            onPress={pickImage}
+            className="w-3/4 mx-auto rounded-lg justify-center items-center bg-grayDarkColor py-4"
+          >
+            <Text className="text-white" style={{ fontFamily: "Cairo" }}>
+              اختر الصورة
+            </Text>
+          </TouchableOpacity>
+          {showBigFileAlert && (
+            <InputWarning type="error" message="حجم الملف غير مسموح به" />
+          )}
+        </View>
         <TouchableOpacity
           onPress={handleUpdate}
           className="w-3/4 mx-auto rounded-lg  justify-center items-center bg-blueColor py-4"
