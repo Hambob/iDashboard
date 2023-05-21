@@ -49,8 +49,8 @@ const DishRow = ({
         }
       )
       .then((res) => {
+        setIsEnabled(!isEnabled);
         showingToast(statusMsg(status));
-        setIsEnabled((previousState) => !previousState);
       })
       .catch((err) => {
         showErrorToast();

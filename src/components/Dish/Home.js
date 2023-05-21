@@ -9,6 +9,7 @@ import axios from "axios";
 import { api, token } from "../../utilts/api";
 import Toast, { BaseToast } from "react-native-toast-message";
 import { event } from "../../event";
+import * as Progress from "react-native-progress";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -16,6 +17,7 @@ const Home = () => {
   const [refresh, setRefresh] = React.useState(false);
   const [dishes, setDishes] = React.useState();
   const [dishId, setDishId] = React.useState();
+  const [showLoading, setShowLoading] = React.useState(false);
 
   const setRefreshAction = () => {
     setRefresh(!refresh);
@@ -58,6 +60,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setShowLoading(true);
     axios
       .get(`${api}/restaurant/dishes`, {
         headers: {
@@ -66,10 +69,11 @@ const Home = () => {
       })
       .then((data) => {
         setDishes(data.data.data);
-        console.log("It's re fetch the Data");
+        setShowLoading(false);
       })
       .catch((err) => {
         console.log("Error -->", err);
+        setShowLoading(false);
       });
 
     event.on("setRefresh", setRefreshAction);
@@ -79,6 +83,16 @@ const Home = () => {
   }, [refresh]);
   return (
     <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">
+      {showLoading && (
+        <View className="w-full h-full  absolute top-0 z-50 justify-center items-center">
+          <Progress.CircleSnail
+            color="#37BD6B"
+            size={90}
+            progress={1}
+            className="ml-4"
+          />
+        </View>
+      )}
       {showDelete && (
         <DeletePopUp dishId={dishId} setShowDelete={setShowDelete} />
       )}
@@ -107,12 +121,14 @@ const Home = () => {
             ))
           ) : (
             <View className="w-full h-96 justify-center items-center">
-              <Text
-                className="text-blackColor text-lg"
-                style={{ fontFamily: "Cairo" }}
-              >
-                لا يوجد أطباق
-              </Text>
+              {!showLoading && (
+                <Text
+                  className="text-blackColor text-lg"
+                  style={{ fontFamily: "Cairo" }}
+                >
+                  لا يوجد أطباق
+                </Text>
+              )}
             </View>
           )}
         </View>
