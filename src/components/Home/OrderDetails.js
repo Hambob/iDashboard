@@ -31,7 +31,7 @@ const OrderDetails = () => {
       )
       .then((res) => {
         Alert.alert("تم قبول الطلب بنجاح");
-        event.emit(setRefreshEvent);
+        event.emit("setRefresh");
         navigation.goBack();
       })
       .catch((err) => {

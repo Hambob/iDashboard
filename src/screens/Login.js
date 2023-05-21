@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { EyeSlashIcon, EyeIcon } from "react-native-heroicons/solid";
 import { useFonts } from "expo-font";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { api } from "../utilts/api";
 import axios from "axios";
 

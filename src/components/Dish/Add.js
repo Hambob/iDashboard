@@ -80,7 +80,7 @@ const Add = ({ setRefreshEvent }) => {
       })
       .then((res) => {
         setProgress(0);
-        event.emit(setRefreshEvent);
+        event.emit("setRefresh");
         navigation.goBack();
       })
       .catch((err) => {

@@ -18,18 +18,24 @@ const DishRow = ({
   dish,
   setDishId,
   showingToast,
-  setDishStatusMsg,
+  showErrorToast,
 }) => {
   const [isEnabled, setIsEnabled] = useState(
     dish.status === "avaliable" ? true : false
   );
-
-  useEffect(() => {
-    setDishStatusMsg(!isEnabled ? "الطلب الأن متوفر" : "الطلب الأن غير متوفر");
-  }, []);
+  const statusMsg = (status) => {
+    switch (status) {
+      case "avaliable":
+        return "الطلب الأن متوفر";
+      case "not_avaliable":
+        return "الطلب الأن غير متوفر";
+      default:
+        return "الطلب الأن غير متوفر";
+    }
+  };
 
   const toggleSwitch = (dish_id) => {
-    const status = isEnabled ? "not_avaliable" : "avaliable";
+    let status = isEnabled ? "not_avaliable" : "avaliable";
     axios
       .patch(
         `${api}/dish/update/${dish_id}`,
@@ -43,15 +49,12 @@ const DishRow = ({
         }
       )
       .then((res) => {
-        setDishStatusMsg(
-          status !== "avaliable" ? "الطلب الأن متوفر" : "الطلب الأن غير متوفر"
-        );
-        showingToast();
+        showingToast(statusMsg(status));
+        setIsEnabled((previousState) => !previousState);
       })
       .catch((err) => {
-        Alert.alert("Error");
+        showErrorToast();
       });
-    setIsEnabled(status === "avaliable" ? true : false);
   };
 
   const navigation = useNavigation();

@@ -7,7 +7,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
-import event from "../../event";
+import { event } from "../../event";
 import axios from "axios";
 import { api, token } from "../../utilts/api";
 
@@ -66,11 +66,8 @@ const Edit = () => {
         type: "image/jpg",
         name: new Date().getTime() + "dish",
       });
-
-    console.log("--->", formData);
-
     axios
-      .patch(`${api}/dish/update/${dish_id}`, formData, {
+      .patch(`${api}/dish/update/${Number(dish_id)}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",

@@ -16,16 +16,24 @@ const Home = () => {
   const [refresh, setRefresh] = React.useState(false);
   const [dishes, setDishes] = React.useState();
   const [dishId, setDishId] = React.useState();
-  const [dishStatusMsg, setDishStatusMsg] = React.useState("");
 
   const setRefreshAction = () => {
     setRefresh(!refresh);
   };
-  const showingToast = () => {
+  const showingToast = (msg) => {
     Toast.show({
       type: "success",
       text1: "تم تحديث حالة الطبق",
-      text2: dishStatusMsg,
+      text2: msg,
+      position: "bottom",
+    });
+  };
+
+  const showErrorToast = () => {
+    Toast.show({
+      type: "error",
+      text1: "خطأ",
+      text2: "حدث خطأ ما",
       position: "bottom",
     });
   };
@@ -58,6 +66,7 @@ const Home = () => {
       })
       .then((data) => {
         setDishes(data.data.data);
+        console.log("It's re fetch the Data");
       })
       .catch((err) => {
         console.log("Error -->", err);
@@ -67,7 +76,7 @@ const Home = () => {
     return () => {
       event.off("setRefresh", setRefreshAction);
     };
-  }, [setRefreshAction]);
+  }, [refresh]);
   return (
     <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">
       {showDelete && (
@@ -93,7 +102,7 @@ const Home = () => {
                 setRefreshAction={setRefreshAction}
                 setDishId={setDishId}
                 showingToast={showingToast}
-                setDishStatusMsg={setDishStatusMsg}
+                showErrorToast={showErrorToast}
               />
             ))
           ) : (
