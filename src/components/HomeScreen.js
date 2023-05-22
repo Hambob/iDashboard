@@ -7,11 +7,10 @@ import OrderDetails from "../components/Home/OrderDetails";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
 import axios from "axios";
 import { api, calcTotal } from "../utilts/api";
-import Toast, { BaseToast } from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
-
 const HomeScreem = () => {
   return (
     <Stack.Navigator>
@@ -37,40 +36,15 @@ export const ViewOrders = () => {
   const [refresh, setRefresh] = useState(false);
   const [isEnabled, setIsEnabled] = useState();
   const [token, setToken] = useState("");
+
   const showingRestaurantToast = (msg) => {
     Toast.show({
       type: "success",
       text1: msg,
       position: "bottom",
+      autoHide: true,
+      visibilityTime: 1000,
     });
-  };
-
-  const showErrorToast = () => {
-    Toast.show({
-      type: "error",
-      text1: "خطأ",
-      text2: "حدث خطأ ما",
-      position: "bottom",
-    });
-  };
-
-  const toastConfig = {
-    success: (props) => (
-      <BaseToast
-        {...props}
-        style={{ zIndex: 100, borderLeftColor: "#37BD6B" }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-        text1Style={{
-          fontSize: 17,
-          fontWeight: "400",
-          fontFamily: "Cairo",
-        }}
-        text2Style={{
-          fontSize: 15,
-          fontFamily: "Cairo",
-        }}
-      />
-    ),
   };
 
   const toastNotificationMsg = (status) => {
@@ -136,15 +110,15 @@ export const ViewOrders = () => {
       .then((res) => {
         setRefresh(!refresh);
         showingRestaurantToast(toastNotificationMsg(status));
+        setIsEnabled(!isEnabled);
       })
       .catch((err) => {
         console.log(err);
       });
-    setIsEnabled((previousState) => !previousState);
   };
   return (
     <SafeAreaView className="w-full h-full bg-white">
-      <Toast config={toastConfig} />
+      {/* <Toast config={toastConfig} /> */}
       <View className="w-full h-16 bg-mainColor flex-row justify-between px-6 items-center">
         <Switch
           trackColor={{ false: "#FFF", true: "#FFF" }}

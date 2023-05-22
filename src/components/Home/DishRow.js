@@ -7,7 +7,7 @@ import FastImage from "react-native-fast-image";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const DishRow = ({ setShowDelete, dish, setDishId, showingToast }) => {
+const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
   const [isEnabled, setIsEnabled] = useState(
     dish.status === "avaliable" ? true : false
   );
@@ -15,11 +15,11 @@ const DishRow = ({ setShowDelete, dish, setDishId, showingToast }) => {
   const statusMsg = (status) => {
     switch (status) {
       case "avaliable":
-        return "الطلب الأن متوفر";
+        return "الطبق الأن متوفر";
       case "not_avaliable":
-        return "الطلب الأن غير متوفر";
+        return "الطبق الأن غير متوفر";
       default:
-        return "الطلب الأن غير متوفر";
+        return "الطبق الأن غير متوفر";
     }
   };
 
@@ -45,7 +45,7 @@ const DishRow = ({ setShowDelete, dish, setDishId, showingToast }) => {
       )
       .then((res) => {
         setIsEnabled(!isEnabled);
-        showingToast(statusMsg(status));
+        secondToastShow(statusMsg(status));
       })
       .catch((err) => {
         console.log(err);

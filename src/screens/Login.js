@@ -13,7 +13,6 @@ import { api } from "../utilts/api";
 import * as Progress from "react-native-progress";
 import axios from "axios";
 import { event } from "../event";
-import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {

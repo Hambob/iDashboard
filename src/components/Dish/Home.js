@@ -1,16 +1,16 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { PlusIcon } from "react-native-heroicons/solid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
 import DeletePopUp from "./DeletePopUp";
 import axios from "axios";
 import { api } from "../../utilts/api";
-import Toast, { BaseToast } from "react-native-toast-message";
 import { event } from "../../event";
 import * as Progress from "react-native-progress";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -20,34 +20,18 @@ const Home = () => {
   const [dishId, setDishId] = React.useState();
   const [showLoading, setShowLoading] = React.useState(false);
 
-  const setRefreshAction = () => {
-    setRefresh(!refresh);
-  };
-  const showingToast = (msg) => {
+  const secondToastShow = (msg) => {
     Toast.show({
       type: "success",
-      text1: "تم تحديث حالة الطبق",
-      text2: msg,
+      text1: msg,
       position: "bottom",
+      autoHide: true,
+      visibilityTime: 1000,
     });
   };
-  const toastConfig = {
-    success: (props) => (
-      <BaseToast
-        {...props}
-        style={{ zIndex: 100, borderLeftColor: "#37BD6B" }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-        text1Style={{
-          fontSize: 17,
-          fontWeight: "400",
-          fontFamily: "Cairo",
-        }}
-        text2Style={{
-          fontSize: 15,
-          fontFamily: "Cairo",
-        }}
-      />
-    ),
+
+  const setRefreshAction = () => {
+    setRefresh(!refresh);
   };
 
   useEffect(() => {
@@ -89,7 +73,6 @@ const Home = () => {
       {showDelete && (
         <DeletePopUp dishId={dishId} setShowDelete={setShowDelete} />
       )}
-      <Toast config={toastConfig} />
       <Text className="text-lg" style={{ fontFamily: "CairoBold" }}>
         الأطباق
       </Text>
@@ -108,7 +91,7 @@ const Home = () => {
                 dish={dish}
                 setRefreshAction={setRefreshAction}
                 setDishId={setDishId}
-                showingToast={showingToast}
+                secondToastShow={secondToastShow}
               />
             ))
           ) : (

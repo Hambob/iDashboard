@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "iDashboard",
-    "slug": "iDashboard",
+    "name": "iDeliveryBusiness",
+    "slug": "iDeliveryBusiness",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/businesslogo.png",
@@ -19,7 +19,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#37BD6B"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -27,10 +29,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.h.abokreen.iDeliveryBusiness"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "10ba00b0-6b43-4c8d-88a8-6a40f2068be3"
+      }
     }
   }
 }

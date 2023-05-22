@@ -11,59 +11,64 @@ import {
 } from "react-native-heroicons/solid";
 import Orders from "./Orders";
 import Dishes from "./Dishes";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "../utilts/toastNotification";
 
 const MyTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer independent={true}>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            borderBottomWidth: 0,
-            borderTopColor: "#37BD6B",
-            height: 60,
-          },
-          tabBarActiveTintColor: "#37BD6B",
-          tabBarLabelStyle: {
-            fontSize: 12,
-            fontFamily: "Cairo",
-          },
-        }}
-      >
-        <Tab.Screen
-          name="الرئسية"
-          component={HomeScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <HomeIcon size={32} fill="#95A5A6" />,
+    <>
+      <NavigationContainer independent={true}>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarStyle: {
+              borderBottomWidth: 0,
+              borderTopColor: "#37BD6B",
+              height: 60,
+            },
+            tabBarActiveTintColor: "#37BD6B",
+            tabBarLabelStyle: {
+              fontSize: 12,
+              fontFamily: "Cairo",
+            },
           }}
-        />
-        <Tab.Screen
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <Cog8ToothIcon size={32} fill="#95A5A6" />,
-          }}
-          name="الإعدادات"
-          component={SettingsScreen}
-        />
-        <Tab.Screen
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <CircleStackIcon size={32} fill="#95A5A6" />,
-          }}
-          name="الأطباق"
-          component={Dishes}
-        />
-        <Tab.Screen
-          options={{
-            headerShown: false,
-            tabBarIcon: () => <Bars4Icon size={32} fill="#95A5A6" />,
-          }}
-          name="الطلبات"
-          component={Orders}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+        >
+          <Tab.Screen
+            name="الرئسية"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <HomeIcon size={32} fill="#95A5A6" />,
+            }}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Cog8ToothIcon size={32} fill="#95A5A6" />,
+            }}
+            name="الإعدادات"
+            component={SettingsScreen}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <CircleStackIcon size={32} fill="#95A5A6" />,
+            }}
+            name="الأطباق"
+            component={Dishes}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <Bars4Icon size={32} fill="#95A5A6" />,
+            }}
+            name="الطلبات"
+            component={Orders}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+      <Toast config={toastConfig} />
+    </>
   );
 };
 
