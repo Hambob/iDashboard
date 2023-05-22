@@ -1,28 +1,17 @@
-import {
-  View,
-  Text,
-  Image,
-  Switch,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, Image, Switch, TouchableOpacity } from "react-native";
 import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { api, imgUrl, token } from "../../utilts/api";
+import { api, imgUrl } from "../../utilts/api";
 import FastImage from "react-native-fast-image";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const DishRow = ({
-  setShowDelete,
-  dish,
-  setDishId,
-  showingToast,
-  showErrorToast,
-}) => {
+const DishRow = ({ setShowDelete, dish, setDishId, showingToast }) => {
   const [isEnabled, setIsEnabled] = useState(
     dish.status === "avaliable" ? true : false
   );
+  const [token, setToken] = useState("");
   const statusMsg = (status) => {
     switch (status) {
       case "avaliable":
@@ -33,6 +22,12 @@ const DishRow = ({
         return "الطلب الأن غير متوفر";
     }
   };
+
+  useEffect(() => {
+    AsyncStorage.getItem("token").then((res) => {
+      setToken(res);
+    });
+  }, []);
 
   const toggleSwitch = (dish_id) => {
     let status = isEnabled ? "not_avaliable" : "avaliable";
@@ -53,7 +48,7 @@ const DishRow = ({
         showingToast(statusMsg(status));
       })
       .catch((err) => {
-        showErrorToast();
+        console.log(err);
       });
   };
 

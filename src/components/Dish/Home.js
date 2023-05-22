@@ -6,10 +6,11 @@ import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
 import DeletePopUp from "./DeletePopUp";
 import axios from "axios";
-import { api, token } from "../../utilts/api";
+import { api } from "../../utilts/api";
 import Toast, { BaseToast } from "react-native-toast-message";
 import { event } from "../../event";
 import * as Progress from "react-native-progress";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -30,16 +31,6 @@ const Home = () => {
       position: "bottom",
     });
   };
-
-  const showErrorToast = () => {
-    Toast.show({
-      type: "error",
-      text1: "خطأ",
-      text2: "حدث خطأ ما",
-      position: "bottom",
-    });
-  };
-
   const toastConfig = {
     success: (props) => (
       <BaseToast
@@ -61,25 +52,27 @@ const Home = () => {
 
   useEffect(() => {
     setShowLoading(true);
-    axios
-      .get(`${api}/restaurant/dishes`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((data) => {
-        setDishes(data.data.data);
-        setShowLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error -->", err);
-        setShowLoading(false);
-      });
+    AsyncStorage.getItem("token").then((token) => {
+      axios
+        .get(`${api}/restaurant/dishes`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((data) => {
+          setDishes(data.data.data);
+          setShowLoading(false);
+        })
+        .catch((err) => {
+          console.log("Error -->", err);
+          setShowLoading(false);
+        });
 
-    event.on("setRefresh", setRefreshAction);
-    return () => {
-      event.off("setRefresh", setRefreshAction);
-    };
+      event.on("setRefresh", setRefreshAction);
+      return () => {
+        event.off("setRefresh", setRefreshAction);
+      };
+    });
   }, [refresh]);
   return (
     <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">
@@ -116,7 +109,6 @@ const Home = () => {
                 setRefreshAction={setRefreshAction}
                 setDishId={setDishId}
                 showingToast={showingToast}
-                showErrorToast={showErrorToast}
               />
             ))
           ) : (

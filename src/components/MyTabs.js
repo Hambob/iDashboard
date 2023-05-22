@@ -15,7 +15,7 @@ import Dishes from "./Dishes";
 const MyTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <NavigationContainer>
+    <NavigationContainer independent={true}>
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: {

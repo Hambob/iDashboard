@@ -10,7 +10,11 @@ import { EyeSlashIcon, EyeIcon } from "react-native-heroicons/solid";
 import { useFonts } from "expo-font";
 import React, { useCallback } from "react";
 import { api } from "../utilts/api";
+import * as Progress from "react-native-progress";
 import axios from "axios";
+import { event } from "../event";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const [fontsLoaded] = useFonts({
@@ -20,7 +24,7 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
-  const [data, setData] = React.useState(null);
+  const [showLoading, setShowLoading] = React.useState(false);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -36,24 +40,38 @@ const Login = () => {
     if (!email || !password) {
       return Alert.alert("Please fill the form");
     }
+    setShowLoading(true);
     axios
-      .post(`${api}/user/login`, { email, password })
-      .then((res) => {
-        Alert.alert("Logged in successfully");
+      .post(`${api}/restaurant-manager/login`, { email, password })
+      .then(async (res) => {
+        await AsyncStorage.setItem("token", res.data.token);
+        setShowLoading(false);
+        event.emit("renderAgain");
       })
       .catch((err) => {
+        setShowLoading(false);
         console.log(err);
       });
   };
 
   return (
-    <View className="flex-1 justify-center items-center">
-      <View className="h-1/2 w-full  items-center justify-end">
+    <View className="flex-1 relative justify-center items-center">
+      {showLoading && (
+        <View className="w-full h-full  absolute top-0 z-50 justify-center items-center">
+          <Progress.CircleSnail
+            color="#37BD6B"
+            size={90}
+            progress={1}
+            className="ml-4"
+          />
+        </View>
+      )}
+      <View className="h-1/2 w-full bg-mainColor items-center justify-end">
         <Image
           source={{
-            uri: "https://idelivery.blob.core.windows.net/media/driver.svg",
+            uri: "https://idelivery.blob.core.windows.net/media/business.png",
           }}
-          className="w-50 h-50 "
+          className="w-60 h-60"
         />
       </View>
       <View className="w-full  h-1/3 px-7 justify-center">
@@ -64,7 +82,7 @@ const Login = () => {
           البريد الإلكتروني
         </Text>
         <TextInput
-          placeholder="hamzah@me.com"
+          placeholder="email@domain.com"
           className="w-80 h-14 border-b border-[#EEE] mx-auto"
           textContentType="emailAddress"
           keyboardType="email-address"

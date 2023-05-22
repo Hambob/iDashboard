@@ -10,7 +10,8 @@ import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
 import { event } from "../../event";
 import axios from "axios";
-import { api, token } from "../../utilts/api";
+import { api } from "../../utilts/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Edit = () => {
   const navigation = useNavigation();
@@ -32,8 +33,12 @@ const Edit = () => {
   const [showInputMessage, setShowInputMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [showBigFileAlert, setShowBigFileAlert] = useState(false);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
+    AsyncStorage.getItem("token").then((res) => {
+      setToken(res);
+    });
     axios
       .get(`${api}/categories`)
       .then((res) => {
@@ -42,8 +47,6 @@ const Edit = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    console.log("----->", dish_id);
   }, []);
 
   const pureArray = [];

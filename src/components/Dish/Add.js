@@ -6,12 +6,13 @@ import { useNavigation } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { api, token } from "./../../utilts/api";
+import { api } from "./../../utilts/api";
 import * as Progress from "react-native-progress";
 import { event } from "../../event";
 import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
 import Toast, { ErrorToast } from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Add = ({ setRefreshEvent }) => {
   const navigation = useNavigation();
@@ -26,6 +27,7 @@ const Add = ({ setRefreshEvent }) => {
   const [inputMessage, setInputMessage] = useState("");
   const [showInputMessage, setShowInputMessage] = useState("");
   const [messageType, setMessageType] = useState("");
+  const [token, setToken] = useState("");
 
   const showToast = () => {
     Toast.show({
@@ -36,14 +38,17 @@ const Add = ({ setRefreshEvent }) => {
   };
 
   useEffect(() => {
-    axios
-      .get(`${api}/categories`)
-      .then((res) => {
-        setCategories(res.data.allCategories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    AsyncStorage.getItem("token").then((token) => {
+      setToken(token);
+      axios
+        .get(`${api}/categories`)
+        .then((res) => {
+          setCategories(res.data.allCategories);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   }, []);
 
   const handleAdd = () => {

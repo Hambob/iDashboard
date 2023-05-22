@@ -1,11 +1,19 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CheckIcon, XMarkIcon } from "react-native-heroicons/solid";
 import axios from "axios";
-import { api, token } from "../../utilts/api";
+import { api } from "../../utilts/api";
 import { event } from "../../event";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const DeletePopUp = ({ setShowDelete, dishId }) => {
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    AsyncStorage.getItem("token").then((res) => {
+      setToken(res);
+    });
+  }, []);
   const deleteDish = () => {
     axios
       .delete(`${api}/dish/delete/${Number(dishId)}`, {

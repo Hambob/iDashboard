@@ -6,18 +6,27 @@ import {
   Image,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { api, token } from "../../utilts/api";
+import { api } from "../../utilts/api";
 import axios from "axios";
 import { event } from "../../event";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
+  const [token, setToken] = React.useState("");
   const { c_name, note, total_price, items, order_id, setRefreshEvent } =
     useRoute()?.params;
+
+  useEffect(() => {
+    AsyncStorage.getItem("token").then((res) => {
+      setToken(res);
+    });
+  }, []);
+
   const orderAction = (status) => {
     axios
       .patch(
