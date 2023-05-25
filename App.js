@@ -10,30 +10,6 @@ import { event } from "./src/event";
 import axios from "axios";
 import { api } from "./src/utilts/api";
 
-const rfreshManagerToken = async (theToken) => {
-  axios
-    .get(`${api}/restaurant-manager/refresh`, {
-      headers: {
-        Authorization: `Bearer ${theToken}`,
-      },
-    })
-    .then(async (res) => {
-      console.log("newToken-->", res.data.newToken);
-      console.log("token-->", res.data.token);
-      if (res.data.newToken) {
-        setToken(res.data.newToken);
-        await AsyncStorage.setItem("token", res.data.newToken);
-      } else {
-        setToken(res.data.token);
-        await AsyncStorage.setItem("token", res.data.token);
-      }
-    })
-    .catch((err) => {
-      setToken("");
-      changeRenderAction();
-    });
-};
-
 export default function App() {
   const [fontsLoaded] = useFonts({
     Cairo: require("./assets/fonts/Cairo-Regular.ttf"),
@@ -56,8 +32,6 @@ export default function App() {
             },
           })
           .then(async (res) => {
-            console.log("newToken-->", res.data.newToken);
-            console.log("token-->", res.data.token);
             if (res.data.newToken) {
               await AsyncStorage.setItem("token", res.data.newToken);
               setToken(res.data.newToken);

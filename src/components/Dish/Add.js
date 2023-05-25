@@ -80,7 +80,7 @@ const Add = ({ setRefreshEvent }) => {
           const { loaded, total } = progressEvent;
           let percent = Math.floor((loaded * 100) / total);
           setProgress(percent);
-          console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+          // console.log(`${loaded}kb of ${total}kb | ${percent}%`);
         },
       })
       .then((res) => {

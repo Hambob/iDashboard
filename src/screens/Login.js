@@ -98,7 +98,7 @@ const Login = () => {
             {!showPassword && (
               <EyeIcon
                 color="red"
-                fill={"#EEE"}
+                fill={"#95A5A6"}
                 size={30}
                 onPress={() => setShowPassword(!showPassword)}
               />
@@ -107,7 +107,7 @@ const Login = () => {
             {showPassword && (
               <EyeSlashIcon
                 color="red"
-                fill={"#EEE"}
+                fill={"#95A5A6"}
                 size={30}
                 onPress={() => setShowPassword(!showPassword)}
               />

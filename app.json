@@ -18,7 +18,10 @@
         "expo-notifications",
         {
           "sounds": ["./assets/sounds/sound.wav"],
-          "icon": "./assets/businesslogo.png"
+          "icon": "./assets/pushicon.png",
+          "color": "#37BD6B",
+          "iosDisplayInForeground": true,
+          "androidMode": "default"
         }
       ]
     ],
