@@ -100,16 +100,16 @@ const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
             {dish.price} د.ل
           </Text>
         </View>
-        {/* <FastImage
-          className="w-44 h-44 rounded-full mb-10"
+        <FastImage
+          className="w-12  h-12 rounded-full"
           source={{ uri: `${imgUrl}/images/${dish.img}` }}
           resizeMode={FastImage.resizeMode.contain}
-        /> */}
-        <Image
+        />
+        {/* <Image
           className="w-12  h-12 rounded-full"
           style={{ borderWidth: 1, borderColor: "#FFF" }}
           source={{ uri: `${imgUrl}/${dish.img}` }}
-        />
+        /> */}
       </View>
     </View>
   );

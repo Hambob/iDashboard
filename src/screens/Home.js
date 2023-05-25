@@ -6,7 +6,6 @@ import { api } from "../utilts/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { useNavigation } from "@react-navigation/native";
 import { useNotifications } from "../hooks/useNotifications";
 
 const Home = () => {
@@ -14,12 +13,8 @@ const Home = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [data, setData] = useState({});
-  const navigation = useNavigation();
   useEffect(() => {
-    const { registerForPushNotificationsAsync, allowsNotificationsAsync } =
-      useNotifications();
-
-    allowsNotificationsAsync();
+    const { registerForPushNotificationsAsync } = useNotifications();
 
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
@@ -63,12 +58,12 @@ const Home = () => {
     //     Alert.alert("تحقق منهم");
     //   });
 
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
+    // return () => {
+    //   Notifications.removeNotificationSubscription(
+    //     notificationListener.current
+    //   );
+    //   Notifications.removeNotificationSubscription(responseListener.current);
+    // };
   }, []);
   return (
     <View className="w-full h-full bg-white">
