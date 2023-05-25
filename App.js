@@ -7,6 +7,32 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { event } from "./src/event";
+import axios from "axios";
+import { api } from "./src/utilts/api";
+
+const rfreshManagerToken = async (theToken) => {
+  axios
+    .get(`${api}/restaurant-manager/refresh`, {
+      headers: {
+        Authorization: `Bearer ${theToken}`,
+      },
+    })
+    .then(async (res) => {
+      console.log("newToken-->", res.data.newToken);
+      console.log("token-->", res.data.token);
+      if (res.data.newToken) {
+        setToken(res.data.newToken);
+        await AsyncStorage.setItem("token", res.data.newToken);
+      } else {
+        setToken(res.data.token);
+        await AsyncStorage.setItem("token", res.data.token);
+      }
+    })
+    .catch((err) => {
+      setToken("");
+      changeRenderAction();
+    });
+};
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,7 +48,29 @@ export default function App() {
 
   useEffect(() => {
     async function getToken() {
-      await AsyncStorage.getItem("token").then((data) => setToken(data));
+      await AsyncStorage.getItem("token").then((theToken) => {
+        axios
+          .get(`${api}/restaurant-manager/refresh`, {
+            headers: {
+              Authorization: `Bearer ${theToken}`,
+            },
+          })
+          .then(async (res) => {
+            console.log("newToken-->", res.data.newToken);
+            console.log("token-->", res.data.token);
+            if (res.data.newToken) {
+              await AsyncStorage.setItem("token", res.data.newToken);
+              setToken(res.data.newToken);
+            } else {
+              await AsyncStorage.setItem("token", res.data.token);
+              setToken(res.data.token);
+            }
+          })
+          .catch((err) => {
+            setToken("");
+            changeRenderAction();
+          });
+      });
     }
     getToken();
     event.on("renderAgain", changeRenderAction);

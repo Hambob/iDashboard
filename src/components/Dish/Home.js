@@ -37,6 +37,7 @@ const Home = () => {
   useEffect(() => {
     setShowLoading(true);
     AsyncStorage.getItem("token").then((token) => {
+      console.log("token-->", token);
       axios
         .get(`${api}/restaurant/dishes`, {
           headers: {

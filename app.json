@@ -5,12 +5,20 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/businesslogo.png",
+    "scheme": "com.h.abokreen.iDeliveryBusiness",
     "userInterfaceStyle": "light",
     "plugins": [
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "sounds": ["./assets/sounds/sound.wav"],
+          "icon": "./assets/businesslogo.png"
         }
       ]
     ],
@@ -24,12 +32,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.h.abokreen.iDeliveryBusiness",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#37BD6B"
-      },
-      "package": "com.h.abokreen.iDeliveryBusiness",
-      "googleServicesFile": "./google-services.json"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
