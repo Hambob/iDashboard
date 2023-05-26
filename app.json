@@ -19,9 +19,7 @@
         {
           "sounds": ["./assets/sounds/sound.wav"],
           "icon": "./assets/pushicon.png",
-          "color": "#37BD6B",
-          "iosDisplayInForeground": true,
-          "androidMode": "default"
+          "color": "#37BD6B"
         }
       ]
     ],

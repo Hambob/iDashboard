@@ -10,42 +10,48 @@ import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { api } from "../../utilts/api";
+import { api, imgUrl } from "../../utilts/api";
 import axios from "axios";
 import { event } from "../../event";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FastImage from "react-native-fast-image";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
-  const [token, setToken] = React.useState("");
+  // const [token, setToken] = React.useState("");
   const { c_name, note, total_price, items, order_id, setRefreshEvent } =
     useRoute()?.params;
 
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((res) => {
-      setToken(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem("token").then((res) => {
+  //     setToken(res);
+  //   });
+  // }, []);
 
   const orderAction = (status) => {
-    axios
-      .patch(
-        `${api}/manager/order/status`,
-        { status, order_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        Alert.alert("تم قبول الطلب بنجاح");
-        event.emit("setRefresh");
-        navigation.goBack();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("Status -->", status);
+    console.log("Order ID -->", order_id);
+    AsyncStorage.getItem("token").then((res) => {
+      console.log("Token -->", res);
+      axios
+        .patch(
+          `${api}/manager/order/status`,
+          { status, order_id },
+          {
+            headers: {
+              Authorization: `Bearer ${res}`,
+            },
+          }
+        )
+        .then((res) => {
+          Alert.alert("تم قبول الطلب بنجاح");
+          event.emit("setRefresh");
+          navigation.goBack();
+        })
+        .catch((err) => {
+          console.log("error -->", err);
+        });
+    });
   };
   return (
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
@@ -116,11 +122,16 @@ const OrderDetails = () => {
                   className="w-[90%] h-16 bg-[#D9D9D9] flex-row rounded-full"
                 >
                   <View className="w-1/3 flex-row justify-around items-center">
-                    <Image
+                    <FastImage
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 1, borderColor: "#FFF" }}
+                      source={{ uri: `${imgUrl}/${item.dish.img}` }}
+                    />
+                    {/* <Image
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${api}/images/${item.dish.image}` }}
-                    />
+                    /> */}
                     <Text style={{ fontFamily: "CairoBold", fontSize: 20 }}>
                       {item.quantity}X
                     </Text>

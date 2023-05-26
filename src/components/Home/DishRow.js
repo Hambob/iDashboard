@@ -102,7 +102,8 @@ const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
         </View>
         <FastImage
           className="w-12  h-12 rounded-full"
-          source={{ uri: `${imgUrl}/images/${dish.img}` }}
+          style={{ borderWidth: 1, borderColor: "#FFF" }}
+          source={{ uri: `${imgUrl}/${dish.img}` }}
           resizeMode={FastImage.resizeMode.contain}
         />
         {/* <Image

@@ -52,7 +52,7 @@ const SettingsScreen = () => {
             color: "#FFF",
           }}
         >
-          تسحيل الخروج
+          تسجيل الخروج
         </Text>
       </Pressable>
     </SafeAreaView>

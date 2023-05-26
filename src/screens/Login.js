@@ -14,6 +14,7 @@ import * as Progress from "react-native-progress";
 import axios from "axios";
 import { event } from "../event";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FastImage from "react-native-fast-image";
 
 const Login = () => {
   const [fontsLoaded] = useFonts({
@@ -66,12 +67,18 @@ const Login = () => {
         </View>
       )}
       <View className="h-1/2 w-full bg-mainColor items-center justify-end">
-        <Image
+        <FastImage
           source={{
             uri: "https://idelivery.blob.core.windows.net/media/business.png",
           }}
           className="w-60 h-60"
         />
+        {/* <Image
+          source={{
+            uri: "https://idelivery.blob.core.windows.net/media/business.png",
+          }}
+          className="w-60 h-60"
+        /> */}
       </View>
       <View className="w-full  h-1/3 px-7 justify-center">
         <Text
