@@ -50,7 +50,7 @@ const Login = () => {
       })
       .catch((err) => {
         setShowLoading(false);
-        console.log(err);
+        Alert.alert("حدث خطأ الرجاء اعادة المحاولة");
       });
   };
 
