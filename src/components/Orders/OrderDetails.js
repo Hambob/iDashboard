@@ -62,7 +62,7 @@ const OrderDetails = () => {
       <View className="w-[90%] h-3/4 bg-[#EEE] mt-6 rounded-lg">
         <View className="w-full h-[20%] flex-row p-4">
           <View className="w-1/2 h-full  justify-around items-center flex-row">
-            {!useRoute().params.doneOrder && (
+            {/* {!useRoute().params.doneOrder && (
               <TouchableOpacity
                 className="px-4 py-2 bg-mainColor"
                 onPress={changeStatus}
@@ -74,7 +74,7 @@ const OrderDetails = () => {
                   جاهز الان
                 </Text>
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
           <View className="w-1/2 h-full  justify-around items-end">
             <Text
