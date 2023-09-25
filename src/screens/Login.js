@@ -36,15 +36,17 @@ const Login = () => {
     return null;
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
+    console.log("Email -->", email);
     if (!email || !password) {
       return Alert.alert("Please fill the form");
     }
     setShowLoading(true);
-    axios
+    await axios
       .post(`${api}/restaurant-manager/login`, { email, password })
       .then(async (res) => {
         await AsyncStorage.setItem("token", res.data.token);
+        await AsyncStorage.setItem("refreshToken", res.data.refreshToken);
         setShowLoading(false);
         event.emit("renderAgain");
       })
@@ -67,18 +69,18 @@ const Login = () => {
         </View>
       )}
       <View className="h-1/2 w-full bg-mainColor items-center justify-end">
-        <FastImage
-          source={{
-            uri: "https://idelivery.blob.core.windows.net/media/business.png",
-          }}
-          className="w-60 h-60"
-        />
-        {/* <Image
+        {/* <FastImage
           source={{
             uri: "https://idelivery.blob.core.windows.net/media/business.png",
           }}
           className="w-60 h-60"
         /> */}
+        <Image
+          source={{
+            uri: "https://idelivery.blob.core.windows.net/media/business.png",
+          }}
+          className="w-60 h-60"
+        />
       </View>
       <View className="w-full  h-1/3 px-7 justify-center">
         <Text

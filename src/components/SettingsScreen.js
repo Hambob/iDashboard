@@ -4,24 +4,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { event } from "../event";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Progress from "react-native-progress";
-import axios from "axios";
-import { api } from "../utilts/api";
+import api_call from "../utilts/interceptor";
 
 const SettingsScreen = () => {
   const [showLoading, setShowLoading] = React.useState(false);
   const [name, setName] = React.useState("");
   useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
-      axios
-        .get(`${api}/manager/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setName(res.data.restaurantManager.name);
-        });
-    }, []);
+    api_call.get(`/manager/profile`).then((res) => {
+      setName(res.data.restaurantManager.name);
+    });
   }, []);
   return (
     <SafeAreaView className="w-full h-full gap-2 relative justify-around items-center bg-white">

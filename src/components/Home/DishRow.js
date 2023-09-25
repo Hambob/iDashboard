@@ -1,17 +1,15 @@
 import { View, Text, Image, Switch, TouchableOpacity } from "react-native";
 import { PencilIcon, TrashIcon } from "react-native-heroicons/solid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { api, imgUrl } from "../../utilts/api";
+import { imgUrl } from "../../utilts/api";
 import FastImage from "react-native-fast-image";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api_call from "../../utilts/interceptor";
 
 const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
   const [isEnabled, setIsEnabled] = useState(
     dish.status === "avaliable" ? true : false
   );
-  const [token, setToken] = useState("");
   const statusMsg = (status) => {
     switch (status) {
       case "avaliable":
@@ -23,26 +21,12 @@ const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
     }
   };
 
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((res) => {
-      setToken(res);
-    });
-  }, []);
-
   const toggleSwitch = (dish_id) => {
     let status = isEnabled ? "not_avaliable" : "avaliable";
-    axios
-      .patch(
-        `${api}/dish/update/${dish_id}`,
-        {
-          status,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+    api_call
+      .patch(`/dish/update/${dish_id}`, {
+        status,
+      })
       .then((res) => {
         setIsEnabled(!isEnabled);
         secondToastShow(statusMsg(status));
@@ -100,17 +84,17 @@ const DishRow = ({ setShowDelete, dish, setDishId, secondToastShow }) => {
             {dish.price} د.ل
           </Text>
         </View>
-        <FastImage
+        {/* <FastImage
           className="w-12  h-12 rounded-full"
           style={{ borderWidth: 1, borderColor: "#FFF" }}
           source={{ uri: `${imgUrl}/${dish.img}` }}
           resizeMode={FastImage.resizeMode.contain}
-        />
-        {/* <Image
+        /> */}
+        <Image
           className="w-12  h-12 rounded-full"
           style={{ borderWidth: 1, borderColor: "#FFF" }}
           source={{ uri: `${imgUrl}/${dish.img}` }}
-        /> */}
+        />
       </View>
     </View>
   );

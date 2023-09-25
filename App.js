@@ -1,7 +1,7 @@
 import Home from "./src/screens/Home";
 import Login from "./src/screens/Login";
 import { useFonts } from "expo-font";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "react-native-gesture-handler";
@@ -24,26 +24,25 @@ export default function App() {
 
   useEffect(() => {
     async function getToken() {
-      await AsyncStorage.getItem("token").then((theToken) => {
-        axios
-          .get(`${api}/restaurant-manager/refresh`, {
-            headers: {
-              Authorization: `Bearer ${theToken}`,
-            },
-          })
-          .then(async (res) => {
-            if (res.data.newToken) {
-              await AsyncStorage.setItem("token", res.data.newToken);
-              setToken(res.data.newToken);
-            } else {
+      await AsyncStorage.getItem("refreshToken").then((theToken) => {
+        if (!theToken) {
+          setToken("");
+          changeRenderAction();
+        } else {
+          axios
+            .get(`${api}/restaurant-manager/refresh`, {
+              headers: {
+                Authorization: `Bearer ${theToken}`,
+              },
+            })
+            .then(async (res) => {
               await AsyncStorage.setItem("token", res.data.token);
               setToken(res.data.token);
-            }
-          })
-          .catch((err) => {
-            setToken("");
-            changeRenderAction();
-          });
+            })
+            .catch((err) => {
+              setToken("");
+            });
+        }
       });
     }
     getToken();

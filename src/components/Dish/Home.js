@@ -5,12 +5,10 @@ import React, { useEffect } from "react";
 import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
 import DeletePopUp from "./DeletePopUp";
-import axios from "axios";
-import { api } from "../../utilts/api";
 import { event } from "../../event";
 import * as Progress from "react-native-progress";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from "react-native-toast-message";
+import api_call from "../../utilts/interceptor";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -36,27 +34,21 @@ const Home = () => {
 
   useEffect(() => {
     setShowLoading(true);
-    AsyncStorage.getItem("token").then((token) => {
-      axios
-        .get(`${api}/restaurant/dishes`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((data) => {
-          setDishes(data.data.data);
-          setShowLoading(false);
-        })
-        .catch((err) => {
-          console.log("Error -->", err);
-          setShowLoading(false);
-        });
+    api_call
+      .get(`/restaurant/dishes`)
+      .then((data) => {
+        setDishes(data.data.data);
+        setShowLoading(false);
+      })
+      .catch((err) => {
+        console.log("Error -->", err);
+        setShowLoading(false);
+      });
 
-      event.on("setRefresh", setRefreshAction);
-      return () => {
-        event.off("setRefresh", setRefreshAction);
-      };
-    });
+    event.on("setRefresh", setRefreshAction);
+    return () => {
+      event.off("setRefresh", setRefreshAction);
+    };
   }, [refresh]);
   return (
     <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">

@@ -9,9 +9,7 @@ import { getInfoAsync } from "expo-file-system";
 import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
 import { event } from "../../event";
-import axios from "axios";
-import { api } from "../../utilts/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api_call from "../../utilts/interceptor";
 
 const Edit = () => {
   const navigation = useNavigation();
@@ -33,14 +31,10 @@ const Edit = () => {
   const [showInputMessage, setShowInputMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [showBigFileAlert, setShowBigFileAlert] = useState(false);
-  const [token, setToken] = useState("");
 
   useEffect(() => {
-    AsyncStorage.getItem("token").then((res) => {
-      setToken(res);
-    });
-    axios
-      .get(`${api}/categories`)
+    api_call
+      .get(`/categories`)
       .then((res) => {
         setCategories(res.data.allCategories);
       })
@@ -71,12 +65,11 @@ const Edit = () => {
         type: "image/jpg",
         name: new Date().getTime() + "dish",
       });
-    axios
-      .patch(`${api}/dish/update/${Number(dish_id)}`, formData, {
+    api_call
+      .patch(`/dish/update/${Number(dish_id)}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {

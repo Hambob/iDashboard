@@ -5,10 +5,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import OrderCard from "./Home/OrderCard";
 import OrderDetails from "../components/Home/OrderDetails";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
-import axios from "axios";
-import { api, calcTotal } from "../utilts/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { calcTotal } from "../utilts/api";
 import Toast from "react-native-toast-message";
+import api_call from "../utilts/interceptor";
 
 const Stack = createStackNavigator();
 const HomeScreem = () => {
@@ -35,7 +34,6 @@ export const ViewOrders = () => {
   const [pendingOrders, setPendingOrders] = useState();
   const [refresh, setRefresh] = useState(false);
   const [isEnabled, setIsEnabled] = useState();
-  const [token, setToken] = useState("");
 
   const showingRestaurantToast = (msg) => {
     Toast.show({
@@ -59,54 +57,35 @@ export const ViewOrders = () => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
-      setToken(token);
-      axios
-        .get(`${api}/manager/orders`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((data) => {
-          setOrders(data.data.orders);
-          const theOrders = data.data.orders.filter(
-            (order) => order.status === "PENDING"
-          );
-          setPendingOrders(theOrders);
-        })
-        .catch((err) => {
-          console.log("Error -->", err);
-        });
+    api_call
+      .get(`/manager/orders`)
+      .then((data) => {
+        setOrders(data.data.orders);
+        const theOrders = data.data.orders.filter(
+          (order) => order.status === "PENDING"
+        );
+        setPendingOrders(theOrders);
+      })
+      .catch((err) => {
+        console.log("Error -->", err);
+      });
 
-      axios
-        .get(`${api}/restaurant/status`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setIsEnabled(res.data.status.status === "OPEN" ? true : false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    api_call
+      .get(`/restaurant/status`)
+      .then((res) => {
+        setIsEnabled(res.data.status.status === "OPEN" ? true : false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [refresh]);
 
   const toggleSwitch = () => {
     const status = isEnabled ? "CLOSE" : "OPEN";
-    axios
-      .patch(
-        `${api}/manager/restaurants/update`,
-        {
-          status,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+    api_call
+      .patch(`/manager/restaurants/update`, {
+        status,
+      })
       .then((res) => {
         setRefresh(!refresh);
         showingRestaurantToast(toastNotificationMsg(status));

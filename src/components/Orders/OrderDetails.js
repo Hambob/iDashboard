@@ -20,34 +20,34 @@ const OrderDetails = () => {
   const { order_id, c_name, note, total_price, items } = useRoute()?.params;
   const [token, setToken] = React.useState("");
 
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((res) => {
-      setToken(res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem("token").then((res) => {
+  //     setToken(res);
+  //   });
+  // }, []);
 
-  const changeStatus = () => {
-    axios
-      .patch(
-        `${api}/manager/order/status`,
-        {
-          status: "ONWAY",
-          order_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        Alert.alert("تم تغيير حالة الطلبية بنجاح");
-        navigation.goBack();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const changeStatus = () => {
+  //   axios
+  //     .patch(
+  //       `${api}/manager/order/status`,
+  //       {
+  //         status: "ONWAY",
+  //         order_id,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       Alert.alert("تم تغيير حالة الطلبية بنجاح");
+  //       navigation.goBack();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   return (
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
       <TouchableOpacity
@@ -112,16 +112,16 @@ const OrderDetails = () => {
                   className="w-[90%] h-16 bg-[#D9D9D9] flex-row rounded-full"
                 >
                   <View className="w-1/3 flex-row justify-around items-center">
-                    <FastImage
+                    {/* <FastImage
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${imgUrl}/${item.dish.img}` }}
-                    />
-                    {/* <Image
+                    /> */}
+                    <Image
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${api}/images/${item.dish.image}` }}
-                    /> */}
+                    />
                     <Text style={{ fontFamily: "CairoBold", fontSize: 20 }}>
                       {item.quantity}X
                     </Text>

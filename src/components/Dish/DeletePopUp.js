@@ -1,26 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CheckIcon, XMarkIcon } from "react-native-heroicons/solid";
-import axios from "axios";
-import { api } from "../../utilts/api";
 import { event } from "../../event";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api_call from "../../utilts/interceptor";
 
 const DeletePopUp = ({ setShowDelete, dishId }) => {
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    AsyncStorage.getItem("token").then((res) => {
-      setToken(res);
-    });
-  }, []);
   const deleteDish = () => {
-    axios
-      .delete(`${api}/dish/delete/${Number(dishId)}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    api_call
+      .delete(`/dish/delete/${Number(dishId)}`)
       .then((res) => {
         setShowDelete(false);
         event.emit("setRefresh");

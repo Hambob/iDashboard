@@ -4,10 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import NewOrders from "./NewOrders";
 import DoneOrdersCard from "./DoneOrdersCard";
 import ProgressOrder from "./ProgressOrder";
-import axios from "axios";
-import { api } from "../../utilts/api";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api_call from "../../utilts/interceptor";
 
 const Home = () => {
   const [isSelect, setIsSelect] = useState("new");
@@ -17,32 +15,25 @@ const Home = () => {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
-      axios
-        .get(`${api}/manager/orders`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((data) => {
-          const theOrders = data.data.orders.filter(
-            (order) => order.status === "PENDING"
-          );
-          const progressOrders = data.data.orders.filter(
-            (order) =>
-              order.status === "TAKENBYD" || order.status === "ACCEPTED"
-          );
-          const filterDoneOrders = data.data.orders.filter(
-            (order) => order.status === "DELIVERED"
-          );
-          setOrders(progressOrders);
-          setPendingOrders(theOrders);
-          setDoneOrders(filterDoneOrders);
-        })
-        .catch((err) => {
-          console.log("Error -->", err);
-        });
-    });
+    api_call
+      .get(`/manager/orders`)
+      .then((data) => {
+        const theOrders = data.data.orders.filter(
+          (order) => order.status === "PENDING"
+        );
+        const progressOrders = data.data.orders.filter(
+          (order) => order.status === "TAKENBYD" || order.status === "ACCEPTED"
+        );
+        const filterDoneOrders = data.data.orders.filter(
+          (order) => order.status === "DELIVERED"
+        );
+        setOrders(progressOrders);
+        setPendingOrders(theOrders);
+        setDoneOrders(filterDoneOrders);
+      })
+      .catch((err) => {
+        console.log("Error -->", err);
+      });
   }, [refresh]);
 
   return (

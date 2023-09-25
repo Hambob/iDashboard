@@ -5,14 +5,12 @@ import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import { SelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
-import { api } from "./../../utilts/api";
 import * as Progress from "react-native-progress";
 import { event } from "../../event";
 import InputWarning from "../utilts/InputWarning";
 import { inputErrorMessage, inputLengthMessage } from "../../utilts/messages";
 import Toast, { ErrorToast } from "react-native-toast-message";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api_call from "../../utilts/interceptor";
 
 const Add = ({ setRefreshEvent }) => {
   const navigation = useNavigation();
@@ -38,17 +36,14 @@ const Add = ({ setRefreshEvent }) => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("token").then((token) => {
-      setToken(token);
-      axios
-        .get(`${api}/categories`)
-        .then((res) => {
-          setCategories(res.data.allCategories);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    api_call
+      .get(`/categories`)
+      .then((res) => {
+        setCategories(res.data.allCategories);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleAdd = () => {
@@ -68,12 +63,11 @@ const Add = ({ setRefreshEvent }) => {
       name: new Date().getTime() + "dish",
     });
 
-    axios
-      .post(`${api}/manager/dish/create`, formData, {
+    api_call
+      .post(`/manager/dish/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${token}`,
         },
 
         onUploadProgress: (progressEvent) => {
