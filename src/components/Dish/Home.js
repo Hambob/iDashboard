@@ -6,9 +6,9 @@ import DishRow from "../Home/DishRow";
 import { useNavigation } from "@react-navigation/native";
 import DeletePopUp from "./DeletePopUp";
 import { event } from "../../event";
-import * as Progress from "react-native-progress";
 import Toast from "react-native-toast-message";
 import api_call from "../../utilts/interceptor";
+import Loading from "../Loading";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -52,16 +52,7 @@ const Home = () => {
   }, [refresh]);
   return (
     <SafeAreaView className="w-full h-full relative bg-white px-4 py-6 pt-10">
-      {showLoading && (
-        <View className="w-full h-full  absolute top-0 z-50 justify-center items-center">
-          <Progress.CircleSnail
-            color="#37BD6B"
-            size={90}
-            progress={1}
-            className="ml-4"
-          />
-        </View>
-      )}
+      {showLoading && <Loading />}
       {showDelete && (
         <DeletePopUp dishId={dishId} setShowDelete={setShowDelete} />
       )}

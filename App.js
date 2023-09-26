@@ -9,6 +9,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { event } from "./src/event";
 import axios from "axios";
 import { api } from "./src/utilts/api";
+import { View } from "react-native";
+import Loading from "./src/components/Loading";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -17,6 +19,7 @@ export default function App() {
   });
   const [token, setToken] = useState("");
   const [changeRender, setChangeRender] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
 
   const changeRenderAction = () => {
     setChangeRender(!changeRender);
@@ -27,6 +30,7 @@ export default function App() {
       await AsyncStorage.getItem("refreshToken").then((theToken) => {
         if (!theToken) {
           setToken("");
+          setShowLoading(false);
           changeRenderAction();
         } else {
           axios
@@ -37,9 +41,11 @@ export default function App() {
             })
             .then(async (res) => {
               await AsyncStorage.setItem("token", res.data.token);
+              setShowLoading(false);
               setToken(res.data.token);
             })
             .catch((err) => {
+              setShowLoading(false);
               setToken("");
             });
         }
@@ -60,6 +66,15 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  if (showLoading) {
+    return (
+      <View className="w-full h-full">
+        <Loading />
+      </View>
+    );
+  }
+
   const Stack = createNativeStackNavigator();
 
   return (

@@ -10,11 +10,11 @@ import { EyeSlashIcon, EyeIcon } from "react-native-heroicons/solid";
 import { useFonts } from "expo-font";
 import React, { useCallback } from "react";
 import { api } from "../utilts/api";
-import * as Progress from "react-native-progress";
 import axios from "axios";
 import { event } from "../event";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FastImage from "react-native-fast-image";
+import Loading from "../components/Loading";
 
 const Login = () => {
   const [fontsLoaded] = useFonts({
@@ -58,16 +58,7 @@ const Login = () => {
 
   return (
     <View className="flex-1 relative justify-center items-center">
-      {showLoading && (
-        <View className="w-full h-full  absolute top-0 z-50 justify-center items-center">
-          <Progress.CircleSnail
-            color="#37BD6B"
-            size={90}
-            progress={1}
-            className="ml-4"
-          />
-        </View>
-      )}
+      {showLoading && <Loading />}
       <View className="h-1/2 w-full bg-mainColor items-center justify-end">
         {/* <FastImage
           source={{
