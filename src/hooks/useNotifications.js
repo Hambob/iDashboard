@@ -31,11 +31,11 @@ export const useNotifications = () => {
       Notifications.setNotificationChannelAsync("default", {
         name: "default",
         importance: Notifications.AndroidImportance.MAX,
-        enableVibrate: true,
-        enableLights: true,
-        lockscreenVisibility: true,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: "#FF231F7C",
+        sound: "default",
+        enableVibrate: true,
+        enableLights: true,
       });
     }
 
