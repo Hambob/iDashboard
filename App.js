@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { event } from "./src/event";
 import axios from "axios";
 import { api } from "./src/utilts/api";
-import { View } from "react-native";
+import { I18nManager, View } from "react-native";
 import Loading from "./src/components/Loading";
 
 export default function App() {
@@ -26,6 +26,11 @@ export default function App() {
   };
 
   useEffect(() => {
+    try {
+      I18nManager.allowRTL(false);
+    } catch (error) {
+      console.log(error);
+    }
     async function getToken() {
       await AsyncStorage.getItem("refreshToken").then((theToken) => {
         if (!theToken) {
