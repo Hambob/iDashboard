@@ -39,11 +39,8 @@ api_call.interceptors.response.use(
             AsyncStorage.setItem("token", res.data.token);
             originalRequest.retry = true;
             originalRequest.headers.Authorization = `Bearer ${res.data.token}`;
-            console.log("refreshed");
           })
           .catch(async (err) => {
-            console.log("refresh token expired");
-            console.log("-->", err);
             await AsyncStorage.clear();
             event.emit("renderAgain");
             return Promise.reject({ err });
@@ -51,6 +48,9 @@ api_call.interceptors.response.use(
       });
 
       return axios(originalRequest);
+    } else if (error.response.status === 403) {
+      await AsyncStorage.clear();
+      event.emit("renderAgain");
     }
     return Promise.reject(error);
   }
