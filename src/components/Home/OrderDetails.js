@@ -6,12 +6,11 @@ import {
   Image,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { api, imgUrl } from "../../utilts/api";
-import axios from "axios";
+import { imgUrl } from "../../utilts/api";
 import { event } from "../../event";
 import FastImage from "react-native-fast-image";
 import api_call from "../../utilts/interceptor";
@@ -28,9 +27,6 @@ const OrderDetails = () => {
         Alert.alert("تم قبول الطلب بنجاح");
         event.emit("setRefresh");
         navigation.goBack();
-      })
-      .catch((err) => {
-        console.log("error -->", err);
       });
   };
   return (
@@ -99,19 +95,20 @@ const OrderDetails = () => {
               {items.map((item) => (
                 <View
                   id={item.order_id}
+                  key={item.order_id}
                   className="w-[90%] h-16 bg-[#D9D9D9] flex-row rounded-full"
                 >
                   <View className="w-1/3 flex-row justify-around items-center">
-                    {/* <FastImage
+                    <FastImage
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 1, borderColor: "#FFF" }}
+                      source={{ uri: `${imgUrl}/${item.dish.img}` }}
+                    />
+                    {/* <Image
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${imgUrl}/${item.dish.img}` }}
                     /> */}
-                    <Image
-                      className="w-12 h-12 rounded-full"
-                      style={{ borderWidth: 1, borderColor: "#FFF" }}
-                      source={{ uri: `${api}/images/${item.dish.image}` }}
-                    />
                     <Text style={{ fontFamily: "CairoBold", fontSize: 20 }}>
                       {item.quantity}X
                     </Text>

@@ -33,14 +33,9 @@ const Edit = () => {
   const [showBigFileAlert, setShowBigFileAlert] = useState(false);
 
   useEffect(() => {
-    api_call
-      .get(`/categories`)
-      .then((res) => {
-        setCategories(res.data.allCategories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    api_call.get(`/categories`).then((res) => {
+      setCategories(res.data.allCategories);
+    });
   }, []);
 
   const pureArray = [];
@@ -75,9 +70,6 @@ const Edit = () => {
       .then((res) => {
         event.emit("setRefresh");
         navigation.goBack();
-      })
-      .catch((err) => {
-        console.log("-->", err);
       });
   };
 

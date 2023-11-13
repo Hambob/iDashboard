@@ -57,27 +57,17 @@ export const ViewOrders = () => {
   };
 
   useEffect(() => {
-    api_call
-      .get(`/manager/orders`)
-      .then((data) => {
-        setOrders(data.data.orders);
-        const theOrders = data.data.orders.filter(
-          (order) => order.status === "PENDING"
-        );
-        setPendingOrders(theOrders);
-      })
-      .catch((err) => {
-        console.log("Error -->", err);
-      });
+    api_call.get(`/manager/orders`).then((data) => {
+      setOrders(data.data.orders);
+      const theOrders = data.data.orders.filter(
+        (order) => order.status === "PENDING"
+      );
+      setPendingOrders(theOrders);
+    });
 
-    api_call
-      .get(`/restaurant/status`)
-      .then((res) => {
-        setIsEnabled(res.data.status.status === "OPEN" ? true : false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    api_call.get(`/restaurant/status`).then((res) => {
+      setIsEnabled(res.data.status.status === "OPEN" ? true : false);
+    });
   }, [refresh]);
 
   const toggleSwitch = () => {
@@ -90,14 +80,10 @@ export const ViewOrders = () => {
         setRefresh(!refresh);
         showingRestaurantToast(toastNotificationMsg(status));
         setIsEnabled(!isEnabled);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
   return (
     <SafeAreaView className="w-full h-full bg-white">
-      {/* <Toast config={toastConfig} /> */}
       <View className="w-full h-16 bg-mainColor flex-row justify-between px-6 items-center">
         <Switch
           trackColor={{ false: "#FFF", true: "#FFF" }}

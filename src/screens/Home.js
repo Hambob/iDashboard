@@ -23,9 +23,6 @@ const Home = () => {
           .patch(`/restaurant-manager/edit`, {
             device_token: device_token,
           })
-          .then((res) => {
-            console.log("Updated");
-          })
           .catch((err) => {
             console.log("Not updated", err);
           });

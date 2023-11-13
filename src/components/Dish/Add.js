@@ -14,7 +14,6 @@ import api_call from "../../utilts/interceptor";
 
 const Add = ({ setRefreshEvent }) => {
   const navigation = useNavigation();
-  const [selected, setSelected] = React.useState("");
   const [categories, setCategories] = React.useState([]);
   const [category, setCategory] = React.useState("1");
   const [image, setImage] = useState(null);
@@ -25,7 +24,6 @@ const Add = ({ setRefreshEvent }) => {
   const [inputMessage, setInputMessage] = useState("");
   const [showInputMessage, setShowInputMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  const [token, setToken] = useState("");
 
   const showToast = () => {
     Toast.show({
@@ -36,14 +34,9 @@ const Add = ({ setRefreshEvent }) => {
   };
 
   useEffect(() => {
-    api_call
-      .get(`/categories`)
-      .then((res) => {
-        setCategories(res.data.allCategories);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    api_call.get(`/categories`).then((res) => {
+      setCategories(res.data.allCategories);
+    });
   }, []);
 
   const handleAdd = () => {
@@ -69,12 +62,10 @@ const Add = ({ setRefreshEvent }) => {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
         },
-
         onUploadProgress: (progressEvent) => {
           const { loaded, total } = progressEvent;
           let percent = Math.floor((loaded * 100) / total);
           setProgress(percent);
-          // console.log(`${loaded}kb of ${total}kb | ${percent}%`);
         },
       })
       .then((res) => {

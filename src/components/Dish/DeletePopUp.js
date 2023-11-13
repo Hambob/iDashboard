@@ -6,15 +6,10 @@ import api_call from "../../utilts/interceptor";
 
 const DeletePopUp = ({ setShowDelete, dishId }) => {
   const deleteDish = () => {
-    api_call
-      .delete(`/dish/delete/${Number(dishId)}`)
-      .then((res) => {
-        setShowDelete(false);
-        event.emit("setRefresh");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    api_call.delete(`/dish/delete/${Number(dishId)}`).then((res) => {
+      setShowDelete(false);
+      event.emit("setRefresh");
+    });
   };
   return (
     <View className="w-80 left-10 z-50  rounded-lg h-36 absolute top-72 justify-center items-center bg-grayDarkColor">

@@ -15,25 +15,20 @@ const Home = () => {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    api_call
-      .get(`/manager/orders`)
-      .then((data) => {
-        const theOrders = data.data.orders.filter(
-          (order) => order.status === "PENDING"
-        );
-        const progressOrders = data.data.orders.filter(
-          (order) => order.status === "TAKENBYD" || order.status === "ACCEPTED"
-        );
-        const filterDoneOrders = data.data.orders.filter(
-          (order) => order.status === "DELIVERED"
-        );
-        setOrders(progressOrders);
-        setPendingOrders(theOrders);
-        setDoneOrders(filterDoneOrders);
-      })
-      .catch((err) => {
-        console.log("Error -->", err);
-      });
+    api_call.get(`/manager/orders`).then((data) => {
+      const theOrders = data.data.orders.filter(
+        (order) => order.status === "PENDING"
+      );
+      const progressOrders = data.data.orders.filter(
+        (order) => order.status === "TAKENBYD" || order.status === "ACCEPTED"
+      );
+      const filterDoneOrders = data.data.orders.filter(
+        (order) => order.status === "DELIVERED"
+      );
+      setOrders(progressOrders);
+      setPendingOrders(theOrders);
+      setDoneOrders(filterDoneOrders);
+    });
   }, [refresh]);
 
   return (

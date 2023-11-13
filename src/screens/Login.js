@@ -20,6 +20,7 @@ const Login = () => {
   const [fontsLoaded] = useFonts({
     Cairo: require("../../assets/fonts/Cairo-Light.ttf"),
     CairoBold: require("../../assets/fonts/Cairo-Bold.ttf"),
+    CairoExtraBold: require("../../assets/fonts/Cairo-ExtraBold.ttf"),
   });
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -37,7 +38,6 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    console.log("Email -->", email);
     if (!email || !password) {
       return Alert.alert("Please fill the form");
     }
@@ -60,22 +60,22 @@ const Login = () => {
     <View className="flex-1 relative justify-center items-center">
       {showLoading && <Loading />}
       <View className="h-1/2 w-full bg-mainColor items-center justify-end">
-        {/* <FastImage
+        <FastImage
           source={{
-            uri: "https://idelivery.blob.core.windows.net/media/business.png",
-          }}
-          className="w-60 h-60"
-        /> */}
-        <Image
-          source={{
-            uri: "https://idelivery.blob.core.windows.net/media/business.png",
+            uri: "https://idelivery.blob.core.windows.net/media/bussiness2.png",
           }}
           className="w-60 h-60"
         />
+        {/* <Image
+          source={{
+            uri: "https://idelivery.blob.core.windows.net/media/bussiness2.png",
+          }}
+          className="w-60 h-60"
+        /> */}
       </View>
       <View className="w-full  h-1/3 px-7 justify-center">
         <Text
-          className="text-right text-sm text-[#95A5A6]"
+          className="text-right text-sm text-[#535c68]"
           style={{ fontFamily: "Cairo" }}
         >
           البريد الإلكتروني
@@ -84,11 +84,12 @@ const Login = () => {
           placeholder="email@domain.com"
           className="w-80 h-14 border-b border-[#EEE] mx-auto"
           textContentType="emailAddress"
+          placeholderTextColor="#535c68"
           keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
         />
         <Text
-          className="text-right mt-10 text-sm text-[#95A5A6] relative"
+          className="text-right mt-10 text-sm text-[#535c68] relative"
           style={{ fontFamily: "Cairo" }}
         >
           كلمة المرور
@@ -98,7 +99,7 @@ const Login = () => {
             {!showPassword && (
               <EyeIcon
                 color="red"
-                fill={"#95A5A6"}
+                fill={"#535c68"}
                 size={30}
                 onPress={() => setShowPassword(!showPassword)}
               />
@@ -107,7 +108,7 @@ const Login = () => {
             {showPassword && (
               <EyeSlashIcon
                 color="red"
-                fill={"#95A5A6"}
+                fill={"#535c68"}
                 size={30}
                 onPress={() => setShowPassword(!showPassword)}
               />
@@ -116,6 +117,7 @@ const Login = () => {
           <TextInput
             placeholder="**********"
             className="w-80 h-14 border-b border-[#EEE] mx-auto text-left"
+            placeholderTextColor="#535c68"
             style={{ direction: "ltr" }}
             secureTextEntry={!showPassword}
             textContentType="password"
@@ -129,8 +131,8 @@ const Login = () => {
           onPress={handleLogin}
         >
           <Text
-            className="text-white  text-sm"
-            style={{ fontFamily: "CairoBold" }}
+            className="text-white text-md"
+            style={{ fontFamily: "CairoExtraBold" }}
           >
             تسجيل الدخول
           </Text>

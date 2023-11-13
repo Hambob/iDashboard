@@ -108,20 +108,20 @@ const OrderDetails = () => {
             <View className="flex-1 justify-center gap-2 items-center">
               {items.map((item) => (
                 <View
-                  id={item.order_id}
+                  key={item.dish.id}
                   className="w-[90%] h-16 bg-[#D9D9D9] flex-row rounded-full"
                 >
                   <View className="w-1/3 flex-row justify-around items-center">
-                    {/* <FastImage
+                    <FastImage
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 1, borderColor: "#FFF" }}
+                      source={{ uri: `${imgUrl}/${item.dish.img}` }}
+                    />
+                    {/* <Image
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${imgUrl}/${item.dish.img}` }}
                     /> */}
-                    <Image
-                      className="w-12 h-12 rounded-full"
-                      style={{ borderWidth: 1, borderColor: "#FFF" }}
-                      source={{ uri: `${api}/images/${item.dish.image}` }}
-                    />
                     <Text style={{ fontFamily: "CairoBold", fontSize: 20 }}>
                       {item.quantity}X
                     </Text>
