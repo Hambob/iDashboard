@@ -24,7 +24,11 @@ const OrderDetails = () => {
     api_call
       .patch(`/manager/order/status`, { status, order_id })
       .then((res) => {
-        Alert.alert("تم قبول الطلب بنجاح");
+        if (status === "CANCELED") {
+          Alert.alert("تم رفض الطلب بنجاح");
+        } else {
+          Alert.alert("تم قبول الطلب بنجاح");
+        }
         event.emit("setRefresh");
         navigation.goBack();
       });
