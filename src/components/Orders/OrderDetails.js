@@ -1,53 +1,15 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Alert,
-} from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { api, imgUrl } from "../../utilts/api";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { imgUrl } from "../../utilts/api";
 import FastImage from "react-native-fast-image";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
   const { order_id, c_name, note, total_price, items } = useRoute()?.params;
-  const [token, setToken] = React.useState("");
 
-  // useEffect(() => {
-  //   AsyncStorage.getItem("token").then((res) => {
-  //     setToken(res);
-  //   });
-  // }, []);
-
-  // const changeStatus = () => {
-  //   axios
-  //     .patch(
-  //       `${api}/manager/order/status`,
-  //       {
-  //         status: "ONWAY",
-  //         order_id,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       Alert.alert("تم تغيير حالة الطلبية بنجاح");
-  //       navigation.goBack();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
   return (
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
       <TouchableOpacity
@@ -61,21 +23,6 @@ const OrderDetails = () => {
       </Text>
       <View className="w-[90%] h-3/4 bg-[#EEE] mt-6 rounded-lg">
         <View className="w-full h-[20%] flex-row p-4">
-          <View className="w-1/2 h-full  justify-around items-center flex-row">
-            {/* {!useRoute().params.doneOrder && (
-              <TouchableOpacity
-                className="px-4 py-2 bg-mainColor"
-                onPress={changeStatus}
-              >
-                <Text
-                  className="text-white"
-                  style={{ fontFamily: "CairoBold" }}
-                >
-                  جاهز الان
-                </Text>
-              </TouchableOpacity>
-            )} */}
-          </View>
           <View className="w-1/2 h-full  justify-around items-end">
             <Text
               style={{ fontFamily: "Cairo" }}
@@ -112,16 +59,16 @@ const OrderDetails = () => {
                   className="w-[90%] h-16 bg-[#D9D9D9] flex-row rounded-full"
                 >
                   <View className="w-1/3 flex-row justify-around items-center">
-                    <FastImage
-                      className="w-12 h-12 rounded-full"
-                      style={{ borderWidth: 1, borderColor: "#FFF" }}
-                      source={{ uri: `${imgUrl}/${item.dish.img}` }}
-                    />
-                    {/* <Image
+                    {/* <FastImage
                       className="w-12 h-12 rounded-full"
                       style={{ borderWidth: 1, borderColor: "#FFF" }}
                       source={{ uri: `${imgUrl}/${item.dish.img}` }}
                     /> */}
+                    <Image
+                      className="w-12 h-12 rounded-full"
+                      style={{ borderWidth: 1, borderColor: "#FFF" }}
+                      source={{ uri: `${imgUrl}/${item.dish.img}` }}
+                    />
                     <Text style={{ fontFamily: "CairoBold", fontSize: 20 }}>
                       {item.quantity}X
                     </Text>

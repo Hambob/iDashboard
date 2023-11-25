@@ -17,11 +17,6 @@ const Orders = () => {
         }}
       />
       <Stack.Screen
-        name="/done-details"
-        component={OrderDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
         name="/new-details"
         component={OrderDetailsFromHome}
         options={{ headerShown: false }}

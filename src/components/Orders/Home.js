@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NewOrders from "./NewOrders";
-import DoneOrdersCard from "./DoneOrdersCard";
 import ProgressOrder from "./ProgressOrder";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
 import api_call from "../../utilts/interceptor";
@@ -11,7 +10,6 @@ const Home = () => {
   const [isSelect, setIsSelect] = useState("new");
   const [orders, setOrders] = useState();
   const [pendingOrders, setPendingOrders] = useState();
-  const [doneOrders, setDoneOrders] = useState();
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -22,12 +20,8 @@ const Home = () => {
       const progressOrders = data.data.orders.filter(
         (order) => order.status === "TAKENBYD" || order.status === "ACCEPTED"
       );
-      const filterDoneOrders = data.data.orders.filter(
-        (order) => order.status === "DELIVERED"
-      );
       setOrders(progressOrders);
       setPendingOrders(theOrders);
-      setDoneOrders(filterDoneOrders);
     });
   }, [refresh]);
 
@@ -71,16 +65,6 @@ const Home = () => {
             قيد التجهيز
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsSelect("done")}>
-          <Text
-            className={`p-2 rounded-lg text-blackColor text-sm ${
-              isSelect === "done" && "bg-mainColor text-white"
-            }`}
-            style={{ fontFamily: "Cairo" }}
-          >
-            المنجزة
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -97,7 +81,6 @@ const Home = () => {
               setRefresh={setRefresh}
             />
           )}
-          {isSelect === "done" && <DoneOrdersCard doneOrders={doneOrders} />}
           {isSelect === "under" && <ProgressOrder orders={orders} />}
         </View>
       </ScrollView>
