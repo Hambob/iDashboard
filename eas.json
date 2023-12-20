@@ -16,7 +16,8 @@
     "preview": {
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m1-medium"
+        "resourceClass": "m-medium",
+        "simulator": true
       },
       "android": {
         "buildType": "apk"
@@ -24,11 +25,17 @@
     },
     "production": {
       "ios": {
-        "resourceClass": "m1-medium"
+        "resourceClass": "m-medium"
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "h.abokreen@gmail.com",
+        "ascAppId": "6474143475",
+        "appleTeamId": "NSMMVL4QTQ"
+      }
+    }
   }
 }
