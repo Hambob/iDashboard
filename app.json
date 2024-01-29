@@ -2,7 +2,7 @@
   "expo": {
     "name": "iDeliveryBusiness",
     "slug": "iDeliveryBusiness",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/businesslogo.png",
     "scheme": "com.h.abokreen.iDeliveryBusiness",
@@ -27,16 +27,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#37BD6B"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.h.abokreen.iDeliveryBusiness"
     },
     "android": {
       "package": "com.h.abokreen.iDeliveryBusiness",
-      "versionCode": 1,
+      "versionCode": 2,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

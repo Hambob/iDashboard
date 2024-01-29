@@ -31,6 +31,9 @@
   },
   "submit": {
     "production": {
+      "android": {
+        "serviceAccountKeyPath": "../Builds/seventh-abacus-404413-eb48656a3012.json"
+      },
       "ios": {
         "appleId": "h.abokreen@gmail.com",
         "ascAppId": "6474143475",
