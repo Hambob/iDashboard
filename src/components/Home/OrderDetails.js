@@ -31,6 +31,11 @@ const OrderDetails = () => {
         }
         event.emit("setRefresh");
         navigation.goBack();
+      })
+      .catch((err) => {
+        Alert.alert(
+          "تم الغاء الطلبية من قبل العميل, قم بتحديث الطلبيات الواردة"
+        );
       });
   };
   return (

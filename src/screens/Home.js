@@ -18,7 +18,6 @@ const Home = () => {
     });
     registerForPushNotificationsAsync()
       .then((device_token) => {
-        console.log("-->", device_token);
         api_call
           .patch(`/restaurant-manager/edit`, {
             device_token: device_token,
