@@ -15,14 +15,15 @@ export const useNotifications = () => {
       }
       if (finalStatus !== "granted") {
         alert("Failed to get push token for push notification!");
-        Notifications.getPermissionsAsync().then((res) => {
-          // console.log("Permission", res);
-        });
+        Notifications.getPermissionsAsync().then((res) => {});
         return;
       }
 
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
+      token = (
+        await Notifications.getExpoPushTokenAsync({
+          projectId: "10ba00b0-6b43-4c8d-88a8-6a40f2068be3",
+        })
+      ).data;
     } else {
       alert("Must use physical device for Push Notifications");
     }

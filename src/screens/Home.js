@@ -16,6 +16,7 @@ const Home = () => {
         shouldSetBadge: false,
       }),
     });
+
     registerForPushNotificationsAsync()
       .then((device_token) => {
         api_call
