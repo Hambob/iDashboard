@@ -12,6 +12,7 @@ const OrderCard = ({
   items,
   setRefresh,
   refresh,
+  c_phone,
 }) => {
   const navigation = useNavigation();
   const setRefreshAction = () => {
@@ -37,6 +38,7 @@ const OrderCard = ({
                 total_price,
                 note,
                 items,
+                c_phone,
                 setRefreshEvent: "setRefresh",
               });
             } else {
@@ -46,6 +48,7 @@ const OrderCard = ({
                 total_price,
                 note,
                 items,
+                c_phone,
                 setRefreshEvent: "setRefresh",
               });
             }

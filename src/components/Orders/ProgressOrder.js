@@ -13,6 +13,7 @@ const ProgressOrder = ({ orders }) => {
             cardType="progress"
             order_id={order.order_id}
             c_name={order.user.fullname}
+            c_phone={order.user.phone}
             total_price={calcTotal(order.orderItem)}
             note={order.note}
             items={order.orderItem}

@@ -70,17 +70,14 @@ export const ViewOrders = () => {
     });
   }, [refresh]);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     const status = isEnabled ? "CLOSE" : "OPEN";
-    api_call
-      .patch(`/manager/restaurants/update`, {
-        status,
-      })
-      .then((res) => {
-        setRefresh(!refresh);
-        showingRestaurantToast(toastNotificationMsg(status));
-        setIsEnabled(!isEnabled);
-      });
+    await api_call.patch(`/manager/restaurants/update`, {
+      status,
+    });
+    setRefresh(!refresh);
+    showingRestaurantToast(toastNotificationMsg(status));
+    setIsEnabled(!isEnabled);
   };
   return (
     <SafeAreaView className="w-full h-full bg-white">
@@ -110,11 +107,12 @@ export const ViewOrders = () => {
           paddingBottom: 150,
         }}
       >
-        <View className="w-full py-4 justify-center items-center">
+        <View className="w-full py justify-center items-center">
           {pendingOrders?.length > 0 ? (
             pendingOrders?.map((order) => (
               <OrderCard
                 c_name={order.user.fullname}
+                c_phone={order.user.phone}
                 total_price={calcTotal(order.orderItem)}
                 key={order.order_id}
                 order_id={order.order_id}

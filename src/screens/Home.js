@@ -4,6 +4,7 @@ import MyTabs from "../components/MyTabs";
 import * as Notifications from "expo-notifications";
 import { useNotifications } from "../hooks/useNotifications";
 import api_call from "../utilts/interceptor";
+import * as Device from "expo-device";
 
 const Home = () => {
   useEffect(() => {
@@ -18,17 +19,14 @@ const Home = () => {
     });
 
     registerForPushNotificationsAsync()
-      .then((device_token) => {
-        api_call
-          .patch(`/restaurant-manager/edit`, {
-            device_token: device_token,
-          })
-          .catch((err) => {
-            console.log("Not updated", err);
-          });
+      .then(async (device_token) => {
+        await api_call.post("/restaurant-manager/devices", {
+          device_token: device_token,
+          device_model: Device.modelName,
+        });
       })
       .catch((err) => {
-        console.log("Register Token error", err);
+        console.log("Register Token error");
       });
   }, [1]);
   return (

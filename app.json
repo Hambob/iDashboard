@@ -2,7 +2,7 @@
   "expo": {
     "name": "iDeliveryBusiness",
     "slug": "iDeliveryBusiness",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/businesslogo.png",
     "scheme": "com.h.abokreen.iDeliveryBusiness",
@@ -34,7 +34,7 @@
     },
     "android": {
       "package": "com.h.abokreen.iDeliveryBusiness",
-      "versionCode": 7,
+      "versionCode": 8,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

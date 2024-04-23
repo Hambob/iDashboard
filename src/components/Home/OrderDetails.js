@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  Linking,
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,8 +18,15 @@ import api_call from "../../utilts/interceptor";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
-  const { c_name, note, total_price, items, order_id, setRefreshEvent } =
-    useRoute()?.params;
+  const {
+    c_name,
+    note,
+    total_price,
+    items,
+    order_id,
+    setRefreshEvent,
+    c_phone,
+  } = useRoute()?.params;
 
   const orderAction = (status) => {
     api_call
@@ -82,6 +90,20 @@ const OrderDetails = () => {
               style={{ fontFamily: "Cairo" }}
               className="text-textColor text-xs"
             >
+              الهاتف:{" "}
+              <Text
+                className="text-blackColor"
+                onPress={() => {
+                  Linking.openURL(`tel:0${c_phone}`);
+                }}
+              >
+                {c_phone}
+              </Text>
+            </Text>
+            <Text
+              style={{ fontFamily: "Cairo" }}
+              className="text-textColor text-xs"
+            >
               الزبون: <Text className="text-blackColor">{c_name}</Text>
             </Text>
             <Text
@@ -135,7 +157,7 @@ const OrderDetails = () => {
             </View>
           </ScrollView>
         </View>
-        <View className="w-full h-1/4 p-4">
+        <View className="w-full h-1/3 p-4">
           <Text style={{ fontFamily: "Cairo" }}>الملاحظات:</Text>
           <Text
             className="flex-1 mt-2 bg-grayColor rounded-lg p-4 text-xs"

@@ -41,7 +41,6 @@ const Home = () => {
         setShowLoading(false);
       })
       .catch((err) => {
-        console.log("Error -->", err);
         setShowLoading(false);
       });
 

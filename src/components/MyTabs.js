@@ -24,13 +24,14 @@ const MyTabs = () => {
             tabBarStyle: {
               borderBottomWidth: 0,
               borderTopColor: "#37BD6B",
-              height: 60,
+              height: 78,
             },
-            tabBarActiveTintColor: "#37BD6B",
             tabBarLabelStyle: {
-              fontSize: 12,
+              fontSize: 10,
               fontFamily: "Cairo",
             },
+            tabBarShowLabel: false,
+            tabBarActiveBackgroundColor: "#2d3436",
           }}
         >
           <Tab.Screen

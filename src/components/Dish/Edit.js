@@ -83,8 +83,6 @@ const Edit = () => {
     });
 
     const fileInfo = await getInfoAsync(result.assets[0].uri);
-    // console.log("fileInfo", fileInfo);
-
     if (fileInfo.size > 1000000) {
       setShowBigFileAlert(true);
     } else {

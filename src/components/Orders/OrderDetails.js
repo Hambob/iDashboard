@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  Linking,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChevronRightIcon } from "react-native-heroicons/solid";
@@ -8,7 +15,8 @@ import FastImage from "react-native-fast-image";
 
 const OrderDetails = () => {
   const navigation = useNavigation();
-  const { order_id, c_name, note, total_price, items } = useRoute()?.params;
+  const { order_id, c_name, note, total_price, items, c_phone } =
+    useRoute()?.params;
 
   return (
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
@@ -22,8 +30,8 @@ const OrderDetails = () => {
         تفاصيل الطلبية
       </Text>
       <View className="w-[90%] h-3/4 bg-[#EEE] mt-6 rounded-lg">
-        <View className="w-full h-[20%] flex-row p-4">
-          <View className="w-1/2 h-full  justify-around items-end">
+        <View className="w-full h-[20%] flex-row p-4 justify-end">
+          <View className="w-1/2 h-full justify-around items-end">
             <Text
               style={{ fontFamily: "Cairo" }}
               className="text-textColor text-xs"
@@ -35,6 +43,20 @@ const OrderDetails = () => {
               className="text-textColor text-xs"
             >
               الزبون: <Text className="text-blackColor">{c_name}</Text>
+            </Text>
+            <Text
+              style={{ fontFamily: "Cairo" }}
+              className="text-textColor text-xs"
+            >
+              الهاتف:{" "}
+              <Text
+                className="text-blackColor"
+                onPress={() => {
+                  Linking.openURL(`tel:0${c_phone}`);
+                }}
+              >
+                {c_phone}
+              </Text>
             </Text>
             <Text
               style={{ fontFamily: "Cairo" }}
