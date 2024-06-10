@@ -34,7 +34,7 @@ const Add = ({ setRefreshEvent }) => {
   };
 
   useEffect(() => {
-    api_call.get(`/categories`).then((res) => {
+    api_call.get(`/categories/RESTAURANT`).then((res) => {
       setCategories(res.data.allCategories);
     });
   }, []);

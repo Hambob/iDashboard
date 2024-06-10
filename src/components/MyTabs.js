@@ -8,11 +8,13 @@ import {
   Bars4Icon,
   Cog8ToothIcon,
   CircleStackIcon,
+  TruckIcon,
 } from "react-native-heroicons/solid";
 import Orders from "./Orders";
 import Dishes from "./Dishes";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "../utilts/toastNotification";
+import RequestDriver from "./RequestDriver";
 
 const MyTabs = () => {
   const Tab = createBottomTabNavigator();
@@ -65,6 +67,14 @@ const MyTabs = () => {
             }}
             name="الطلبات"
             component={Orders}
+          />
+          <Tab.Screen
+            options={{
+              headerShown: false,
+              tabBarIcon: () => <TruckIcon size={32} fill="#95A5A6" />,
+            }}
+            name="طلب سائق"
+            component={RequestDriver}
           />
         </Tab.Navigator>
       </NavigationContainer>

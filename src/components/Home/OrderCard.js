@@ -13,6 +13,8 @@ const OrderCard = ({
   setRefresh,
   refresh,
   c_phone,
+  orderType,
+  service_fee,
 }) => {
   const navigation = useNavigation();
   const setRefreshAction = () => {
@@ -25,8 +27,18 @@ const OrderCard = ({
     };
   }, [setRefreshAction]);
   return (
-    <View className="w-[90%] h-32 mt-4 flex-row bg-mainColor rounded-xl">
+    <View
+      className={`w-[90%] h-32 mt-4 flex-row ${
+        orderType === "delivery" ? "bg-mainColor" : "bg-grayDarkColor"
+      } rounded-xl`}
+    >
       <View className="w-1/2 h-full justify-center items-center">
+        {orderType === "personal" && (
+          <Text className="absolute text-xs bottom-0 px-2 py-1 bg-blueColor left-0 rounded-xl text-white font-Cairo">
+            إستلام شخصــي
+          </Text>
+        )}
+
         <TouchableOpacity
           className="px-4 py-2 bg-secondColor rounded-lg"
           onPress={() => {
@@ -39,6 +51,8 @@ const OrderCard = ({
                 note,
                 items,
                 c_phone,
+                service_fee,
+                orderType,
                 setRefreshEvent: "setRefresh",
               });
             } else {
@@ -50,6 +64,8 @@ const OrderCard = ({
                 items,
                 c_phone,
                 setRefreshEvent: "setRefresh",
+                service_fee,
+                orderType,
               });
             }
           }}

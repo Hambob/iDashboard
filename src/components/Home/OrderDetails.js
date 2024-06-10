@@ -25,26 +25,47 @@ const OrderDetails = () => {
     items,
     order_id,
     setRefreshEvent,
+    service_fee,
+    orderType,
     c_phone,
   } = useRoute()?.params;
 
   const orderAction = (status) => {
-    api_call
-      .patch(`/manager/order/status`, { status, order_id })
-      .then((res) => {
-        if (status === "CANCELED") {
-          Alert.alert("تم رفض الطلب بنجاح");
-        } else {
-          Alert.alert("تم قبول الطلب بنجاح");
-        }
-        event.emit("setRefresh");
-        navigation.goBack();
-      })
-      .catch((err) => {
-        Alert.alert(
-          "تم الغاء الطلبية من قبل العميل, قم بتحديث الطلبيات الواردة"
-        );
-      });
+    if (orderType === "delivery") {
+      api_call
+        .patch(`/manager/order/status`, { status, order_id })
+        .then((res) => {
+          if (status === "CANCELED") {
+            Alert.alert("تم رفض الطلب بنجاح");
+          } else {
+            Alert.alert("تم قبول الطلب بنجاح");
+          }
+          event.emit("setRefresh");
+          navigation.goBack();
+        })
+        .catch((err) => {
+          Alert.alert(
+            "تم الغاء الطلبية من قبل العميل, قم بتحديث الطلبيات الواردة"
+          );
+        });
+    } else {
+      api_call
+        .patch(`/manager/personal-order/status`, { status, order_id })
+        .then((res) => {
+          if (status === "CANCELED") {
+            Alert.alert("تم رفض الطلب بنجاح");
+          } else {
+            Alert.alert("تم قبول الطلب بنجاح");
+          }
+          event.emit("setRefresh");
+          navigation.goBack();
+        })
+        .catch((err) => {
+          Alert.alert(
+            "تم الغاء الطلبية من قبل العميل, قم بتحديث الطلبيات الواردة"
+          );
+        });
+    }
   };
   return (
     <SafeAreaView className="flex-1 bg-white relative justify-center items-center">
@@ -80,12 +101,22 @@ const OrderDetails = () => {
             </TouchableOpacity>
           </View>
           <View className="w-1/2 h-full  justify-around items-end">
-            <Text
-              style={{ fontFamily: "Cairo" }}
-              className="text-textColor text-xs"
-            >
-              رقم الطلبية: <Text className="text-blackColor">{order_id}</Text>
-            </Text>
+            {orderType === "delivery" ? (
+              <Text
+                style={{ fontFamily: "Cairo" }}
+                className="text-textColor text-xs"
+              >
+                رقم الطلبية: <Text className="text-blackColor">{order_id}</Text>
+              </Text>
+            ) : (
+              <Text
+                style={{ fontFamily: "Cairo" }}
+                className="text-textColor text-xs"
+              >
+                عمولة التطبيق :{" "}
+                <Text className="text-blackColor">{service_fee} د.ل</Text>
+              </Text>
+            )}
             <Text
               style={{ fontFamily: "Cairo" }}
               className="text-textColor text-xs"

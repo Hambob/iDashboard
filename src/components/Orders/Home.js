@@ -1,27 +1,27 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NewOrders from "./NewOrders";
 import ProgressOrder from "./ProgressOrder";
 import { ArrowPathIcon } from "react-native-heroicons/solid";
 import api_call from "../../utilts/interceptor";
+import OrderCard from "../Home/OrderCard";
+import { calcTotal } from "../../utilts/api";
 
 const Home = () => {
-  const [isSelect, setIsSelect] = useState("new");
   const [orders, setOrders] = useState();
-  const [pendingOrders, setPendingOrders] = useState();
+  const [inProgressPersonalOrders, setInProgressPersonalOrders] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     api_call.get(`/manager/orders`).then((data) => {
-      const theOrders = data.data.orders.filter(
-        (order) => order.status === "PENDING"
-      );
       const progressOrders = data.data.orders.filter(
         (order) => order.status === "TAKENBYD" || order.status === "ACCEPTED"
       );
       setOrders(progressOrders);
-      setPendingOrders(theOrders);
+
+      api_call.get("manager/personal-order/ACCEPTED").then((data) => {
+        setInProgressPersonalOrders(data.data.orders);
+      });
     });
   }, [refresh]);
 
@@ -38,33 +38,8 @@ const Home = () => {
           className="text-blackColor text-xl"
           style={{ fontFamily: "CairoBold" }}
         >
-          سجل الطلبات
+          الطلبات قيد التجهيز
         </Text>
-      </View>
-      <View className="w-full h-16 mt-4 justify-between items-center flex-row">
-        <TouchableOpacity
-          className="px-2 py-2 rounded-lg"
-          onPress={() => setIsSelect("new")}
-        >
-          <Text
-            className={`p-2 rounded-lg text-blackColor text-sm ${
-              isSelect === "new" && "bg-mainColor text-white"
-            }`}
-            style={{ fontFamily: "Cairo" }}
-          >
-            الطلبات الجديدة
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsSelect("under")}>
-          <Text
-            className={`p-2 rounded-lg text-blackColor text-sm ${
-              isSelect === "under" && "bg-mainColor text-white"
-            }`}
-            style={{ fontFamily: "Cairo" }}
-          >
-            قيد التجهيز
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -73,15 +48,40 @@ const Home = () => {
         }}
         className="w-full h-full"
       >
-        <View className="w-full h-full justify-center items-center">
-          {isSelect === "new" && (
-            <NewOrders
-              pendingOrders={pendingOrders}
-              refresh={refresh}
+        <View className="w-full h-full justify-center items-center mt-2">
+          {inProgressPersonalOrders?.map((order) => (
+            <OrderCard
+              c_name={order.user.fullname}
+              c_phone={order.user.phone}
+              total_price={calcTotal(order.orderItem)}
+              key={order.id}
+              order_id={order.id}
+              cardType="progress"
+              orderType="personal"
+              note={order.note}
+              items={order.orderItem}
               setRefresh={setRefresh}
+              service_fee={order.service_fee}
+              refresh={refresh}
             />
-          )}
-          {isSelect === "under" && <ProgressOrder orders={orders} />}
+          ))}
+
+          {orders?.map((order) => (
+            <OrderCard
+              c_name={order.user.fullname}
+              c_phone={order.user.phone}
+              total_price={calcTotal(order.orderItem)}
+              key={order.order_id}
+              order_id={order.order_id}
+              cardType="progress"
+              note={order.note}
+              items={order.orderItem}
+              setRefresh={setRefresh}
+              service_fee={0}
+              refresh={refresh}
+              orderType="delivery"
+            />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>

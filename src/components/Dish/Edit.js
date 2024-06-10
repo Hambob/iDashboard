@@ -33,7 +33,7 @@ const Edit = () => {
   const [showBigFileAlert, setShowBigFileAlert] = useState(false);
 
   useEffect(() => {
-    api_call.get(`/categories`).then((res) => {
+    api_call.get(`/categories/RESTAURANT`).then((res) => {
       setCategories(res.data.allCategories);
     });
   }, []);

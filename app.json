@@ -2,7 +2,7 @@
   "expo": {
     "name": "iDeliveryBusiness",
     "slug": "iDeliveryBusiness",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/businesslogo.png",
     "scheme": "com.h.abokreen.iDeliveryBusiness",
@@ -20,7 +20,8 @@
           "icon": "./assets/pushicon.png",
           "color": "#37BD6B"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -34,7 +35,7 @@
     },
     "android": {
       "package": "com.h.abokreen.iDeliveryBusiness",
-      "versionCode": 8,
+      "versionCode": 9,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

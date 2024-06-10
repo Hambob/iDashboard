@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { EyeSlashIcon, EyeIcon } from "react-native-heroicons/solid";
 import { useFonts } from "expo-font";

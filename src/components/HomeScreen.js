@@ -31,6 +31,7 @@ const HomeScreem = () => {
 
 export const ViewOrders = () => {
   const [orders, setOrders] = useState();
+  const [personalOrders, setPersonalOrders] = useState([]);
   const [pendingOrders, setPendingOrders] = useState();
   const [refresh, setRefresh] = useState(false);
   const [isEnabled, setIsEnabled] = useState();
@@ -63,6 +64,10 @@ export const ViewOrders = () => {
         (order) => order.status === "PENDING"
       );
       setPendingOrders(theOrders);
+    });
+
+    api_call.get("manager/personal-order/PENDING").then((data) => {
+      setPersonalOrders(data.data.orders);
     });
 
     api_call.get(`/restaurant/status`).then((res) => {
@@ -108,7 +113,7 @@ export const ViewOrders = () => {
         }}
       >
         <View className="w-full py justify-center items-center">
-          {pendingOrders?.length > 0 ? (
+          {pendingOrders?.length > 0 || personalOrders?.length > 0 ? (
             pendingOrders?.map((order) => (
               <OrderCard
                 c_name={order.user.fullname}
@@ -121,6 +126,8 @@ export const ViewOrders = () => {
                 items={order.orderItem}
                 setRefresh={setRefresh}
                 refresh={refresh}
+                service_fee={0}
+                orderType="delivery"
               />
             ))
           ) : (
@@ -133,6 +140,23 @@ export const ViewOrders = () => {
               </Text>
             </View>
           )}
+
+          {personalOrders?.map((order) => (
+            <OrderCard
+              c_name={order.user.fullname}
+              c_phone={order.user.phone}
+              total_price={calcTotal(order.orderItem)}
+              key={order.id}
+              order_id={order.id}
+              cardType="new"
+              orderType="personal"
+              note={order.note}
+              items={order.orderItem}
+              setRefresh={setRefresh}
+              service_fee={order.service_fee}
+              refresh={refresh}
+            />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
