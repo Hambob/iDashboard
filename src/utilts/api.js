@@ -1,5 +1,5 @@
-// export const api = "http://192.168.1.111:3001";
-export const api = "https://node6730-idelivery.fin.libyanspider.cloud";
+export const api = "http://192.168.1.111:3001";
+// export const api = "https://node6730-idelivery.fin.libyanspider.cloud";
 
 export const imgUrl = "https://idelivery.blob.core.windows.net/images";
 export const calcTotal = (items) => {

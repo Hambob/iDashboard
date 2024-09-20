@@ -20,6 +20,7 @@ const Home = () => {
 
     registerForPushNotificationsAsync()
       .then(async (device_token) => {
+        console.log("Device Token: ", Device.modelName, device_token);
         await api_call.post("/restaurant-manager/devices", {
           device_token: device_token,
           device_model: Device.modelName,

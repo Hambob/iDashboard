@@ -68,18 +68,18 @@ const Login = () => {
         {showLoading && <Loading />}
 
         <View className="h-1/2 w-full bg-mainColor items-center justify-end">
-          <FastImage
-            source={{
-              uri: "https://idelivery.blob.core.windows.net/media/bussiness2.png",
-            }}
-            className="w-60 h-60"
-          />
-          {/* <Image
+          {/* <FastImage
             source={{
               uri: "https://idelivery.blob.core.windows.net/media/bussiness2.png",
             }}
             className="w-60 h-60"
           /> */}
+          <Image
+            source={{
+              uri: "https://idelivery.blob.core.windows.net/media/bussiness2.png",
+            }}
+            className="w-60 h-60"
+          />
         </View>
         <View className="w-full  h-1/3 px-7 justify-center">
           <Text
